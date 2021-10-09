@@ -14,7 +14,7 @@ function App() {
 
   return (<Router>
     <div className="App">
-    {!isLogin? <Header/>:null}
+    {!isLogin? <Header  link='Sign in' link2='Sign up'/>:<Header link='Sign out' link2=''/>}
 
       <div className="auth-wrapper">
         <div className="auth-inner">

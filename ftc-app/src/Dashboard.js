@@ -1,15 +1,20 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
-const Dashboard=(props)=>{
-    const {isLogin}=useSelector(state=>state.user)
-   
-    return(
-        isLogin?
-        <div>
-            <p>Welcome {props.user}</p>
-        </div>:
-        <Redirect to={'/sign-in'}/>
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {  Link ,Redirect} from "react-router-dom";
+
+
+const Dashboard = (props) => {
+    const { isLogin } = useSelector(state => state.user)
+    useEffect(()=>{
+        <Redirect to={'/sign-in'} />
+    },[isLogin])
+
+    return (
+        isLogin ?
+            <div>
+                <p>Welcome {props.user}</p>
+            </div> :
+            <Redirect to={'/sign-in'} />
     )
 }
 

@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { clearUsers ,isUserLogin} from './redux/features/userSlice'
 import firebaseConfig from "./config";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+import { Redirect } from 'react-router';
 import Dashboard from "./Dashboard";
 
 const Login = () => {
@@ -32,8 +34,11 @@ const handleLogin=(e)=>{
       });
 }
 
-if (currentUser) {
-    return  <Dashboard user={email}/>
+if (currentUser) { 
+    return(
+        <Dashboard user={email}/>
+    )
+  
   }
     
    
