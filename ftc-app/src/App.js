@@ -7,6 +7,7 @@ import Login from "./login";
 import SignUp from "./signup";
 import Dashboard from './Dashboard';
 import Header from './header';
+import EmailVerification from './emailVerification';
 
 function App() {
   
@@ -14,7 +15,7 @@ function App() {
 
   return (<Router>
     <div className="App">
-    {!isLogin? <Header  link='Sign in' link2='Sign up'/>:<Header link='Sign out' link2=''/>}
+   <Header/>
 
       <div className="auth-wrapper">
         <div className="auth-inner">
@@ -23,6 +24,7 @@ function App() {
             <Route path="/sign-in" component={Login} />
             <Route path="/sign-up" component={SignUp} />
             <Route path="/dashboard" component={Dashboard} />
+            <Route path="/email-verification" component={EmailVerification} />
           </Switch>
         </div>
       </div>
