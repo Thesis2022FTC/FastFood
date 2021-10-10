@@ -25,10 +25,10 @@ const Dashboard = () => {
         return (
 
             <div>
-                <p>Welcome {email}</p>
-                <p>Name:{displayName}</p>
+                <p>Welcome {displayName}</p>
+                <p>Email:{email}</p>
                 <p><img src={`${photoURL}`} /></p>
-                <p>Verified:{photoURL}</p>
+                
             </div>
         )
     }   

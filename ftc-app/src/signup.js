@@ -9,7 +9,7 @@ const SignUp = () => {
     const dispatch = useDispatch()
     const [currentUser, setCurrentUser] = useState(null);
     const [error, setError] = useState()
-    
+    let image="https://firebasestorage.googleapis.com/v0/b/fastfood-queue.appspot.com/o/Jolibee%2FJollibee-logo.png?alt=media&token=3c45576b-bd03-4a27-8bb7-50f4e3279ee3"
     const auth = getAuth();
     useEffect(() => {
         dispatch(clearUsers())
@@ -22,13 +22,13 @@ const SignUp = () => {
             await createUserWithEmailAndPassword(auth, email.value, password.value);
             
             await updateProfile(auth.currentUser, {
-                displayName: fname.value+' ' + lname.value, photoURL: "https://example.com/jane-q-user/profile.jpg"
+                displayName: fname.value+' ' + lname.value, photoURL: image
               })
-            await sendEmailVerification(auth.currentUser)
+            
             await signInWithEmailAndPassword(auth, email.value, password.value)
             setCurrentUser(true);
-            // setEmail(email.value)
             dispatch(isUserLogin(true))
+            await sendEmailVerification(auth.currentUser)
         } catch (error) {
             setError(error.message  )   
         }
