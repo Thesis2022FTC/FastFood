@@ -2,33 +2,37 @@ import React from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Login from "./login";
 import SignUp from "./signup";
 import Dashboard from './Dashboard';
 import Header from './header';
 import EmailVerification from './emailVerification';
-
+import Admin from './Admin'
+import Profile from './profile'
+import { getAuth } from 'firebase/auth'
 function App() {
-  
-  const {isLogin} = useSelector((state) => state.user)
-
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const { isLogin } = useSelector((state) => state.user)
+  console.log('isLogin:', isLogin)
   return (<Router>
     <div className="App">
-   <Header/>
+      {/* {!isLogin?<Header />:null} */}
 
-      <div className="auth-wrapper">
-        <div className="auth-inner">
-          <Switch>
-            <Route exact path='/' component={Login} />
-            <Route path="/sign-in" component={Login} />
-            <Route path="/sign-up" component={SignUp} />
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/email-verification" component={EmailVerification} />
-          </Switch>
-        </div>
-      </div>
-    </div></Router>
+      {!user ? null : <Header />}
+      <Switch>
+        <Route exact path='/' component={Login} />
+        <Route path="/admin" component={Admin} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/sign-in" component={Login} />
+        <Route path="/sign-up" component={SignUp} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/email-verification" component={EmailVerification} />
+
+      </Switch>
+
+    </div></Router >
   );
 }
 

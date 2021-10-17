@@ -48,6 +48,8 @@ const SignUp = () => {
     
 
     return (
+        <div className="auth-wrapper">
+      <div className="auth-inner">
         <form onSubmit={handleSubmit}>
             <h3>Sign Up</h3>
 
@@ -83,6 +85,7 @@ const SignUp = () => {
                 Already registered <Link to={"/sign-in"}>Sign in</Link>
             </p>
         </form>
+        </div></div>
     );
 }
 export default SignUp;

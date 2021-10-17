@@ -1,37 +1,61 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import DataTable from './MDComponent/DataTable'
+import ControlledCarousel from "./MDComponent/Carousel";
+import CardGrid from "./MDComponent/Cards";
+import db from './config';
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { getUser } from "./redux/features/userSlice";
 
 const Dashboard = () => {
+    const dispatch = useDispatch();
     const { isLogin } = useSelector(state => state.user)
+    const [store, setStore] = useState([])
     const auth = getAuth();
     const user = auth.currentUser;
-    if(!isLogin){
+
+    useEffect(() => {
+        let isSubscribed = true
+        if (isSubscribed) {
+            // dispatch(getUser(user))
+            fetchStore();
+        }
+
+        return () => isSubscribed = false
+
+    }, [])
+
+
+
+    const fetchStore = async () => {
+        const q = query(collection(db, "fastfood"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const fastfood = [];
+            querySnapshot.forEach((doc) => {
+                fastfood.push(doc.data());
+            });
+            setStore(fastfood)
+            console.log(JSON.stringify(store))
+        });
+
+    }
+    if (!isLogin) {
         return <Redirect to={'/sign-in'} />
     }
-    if (user !== null) {
-        // The user object has basic properties such as display name, email, etc.
-        const displayName = user.displayName.toString();
-        const email = user.email;
-        const photoURL = user.photoURL;
-        const emailVerified = user.emailVerified;
 
-        // The user's ID, unique to the Firebase project. Do NOT use
-        // this value to authenticate with your backend server, if
-        // you have one. Use User.getToken() instead.
-        const uid = user.uid;
 
-        return (
 
-            <div>
-                <p>Welcome {displayName}</p>
-                <p>Email:{email}</p>
-                <p><img src={`${photoURL}`} /></p>
-                
+    return (
+        <div className="container bg-light" style={{ marginTop: 30, paddingTop: 30, marginBottom: 100 }}>
+            <div className="container-fluid bg-dark" > <ControlledCarousel fastfood={store} /></div>
+            <div style={{ marginTop: 50, paddingBottom: 50 }}>
+                <CardGrid fastfood={store} />
             </div>
-        )
-    }   
+
+        </div>
+    )
 }
 
 export default Dashboard;

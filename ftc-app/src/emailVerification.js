@@ -17,7 +17,6 @@ const EmailVerification = () => {
         }catch(err){
             alert('Email already sent!!!')
         }
-      
 
 
     }

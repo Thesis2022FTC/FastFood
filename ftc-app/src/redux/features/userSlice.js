@@ -1,13 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    users:{
-        email: '',
-        displayName:'',
-        image:'',
-        phoneNumber:''
-    },
-    isLogin:false
+    users:[],
+    isLogin:'false'
  
 }
 
@@ -17,9 +12,10 @@ export const userSlice = createSlice({
   reducers: {
     getUser: (state,action) => {
       state.users=action.payload
+      console.log('Users:',JSON.stringify(state.users))
     },
     clearUsers: (state,action) => {
-      state.users=action.payload
+      // state.users=action.payload
       state.isLogin=false
     },
     isUserLogin:(state,action)=>{

@@ -1,44 +1,54 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
-import { clearUsers, isUserLogin } from './redux/features/userSlice'
+import { clearUsers, getUser, isUserLogin } from './redux/features/userSlice'
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap'
+import { Navbar, Container, Nav, NavDropdown, Badge } from 'react-bootstrap'
+import Avatar from 'react-avatar';
 
 const Header = () => {
-    const { isLogin } = useSelector(state => state.user)
+    const history=useHistory()
+    const { isLogin,users} = useSelector(state => state.user)
     const dispatch = useDispatch()
     const auth = getAuth();
-    const user = auth.currentUser;
+    const user=auth.currentUser;
 
     const logout = (e) => {
         e.preventDefault()
+        alert("Sign out now?")
         dispatch(clearUsers())
         signOut(auth)
-       
+        
     }
 
-    if(!isLogin){
+    if (!isLogin) {
         return <Redirect to={'/sign-in'} />
     }
 
     const NavBarLogin = () => {
         if (!isLogin) {
             return (
-                <Nav>
-                    <Nav.Link href="/sign-up">Sign up</Nav.Link>
-                </Nav>
+               null
             )
         }
         else {
+            // dispatch(getUser(user))
             return (
                 <Nav>
                     <Nav.Link eventKey={2} href="#">
-                        My Cart
+                        My Cart <Badge bg="secondary">0</Badge>
+                        <span className="visually-hidden">unread messages</span>
                     </Nav.Link>
-                    <Nav.Link href={"/sign-up"} onClick={logout} >
-                        Sign out</Nav.Link>
+
+                    <NavDropdown title={<Avatar name={user.displayName} size="30" round={true} />} id="avatar-dropdown" style={{ marginRight: 20 }}>
+
+                        <NavDropdown.Item href="/profile"><Avatar round={true} name={user.displayName} size="20" style={{ marginRight: 5 }} />{user.displayName}</NavDropdown.Item>
+                        <NavDropdown.Item  style={{ fontSize: 10 }}>{user.email}</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item onClick={()=>history.push('/admin')}>Admin Panel</NavDropdown.Item>
+                        <NavDropdown.Item href={"/sign-in"} onClick={logout}>Sign out</NavDropdown.Item>
+                    </NavDropdown>
 
                 </Nav>
             )
@@ -70,3 +80,4 @@ const Header = () => {
     )
 }
 export default Header;
+
