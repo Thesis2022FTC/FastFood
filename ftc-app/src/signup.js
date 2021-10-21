@@ -14,9 +14,7 @@ const SignUp = () => {
     const [error, setError] = useState()
     let image = "https://firebasestorage.googleapis.com/v0/b/fastfood-queue.appspot.com/o/Jolibee%2FJollibee-logo.png?alt=media&token=3c45576b-bd03-4a27-8bb7-50f4e3279ee3"
     const auth = getAuth();
-    const user=auth.currentUser;
-
-
+    
 
     useEffect(() => {
         dispatch(clearUsers())
@@ -24,6 +22,7 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const user=auth.currentUser;
         const { email, password, fname, lname, phone, userType } = e.target.elements;
         const profile = {
             Firstname: fname.value,
