@@ -14,7 +14,7 @@ const ControlledCarousel = ({ fastfood }) => {
                 <Carousel.Item>
                     <img
                         width="200"
-                        height="200"
+                        height="250"
                         className="d-block w-100"
                         // src={item.Logo}
                         alt={item.CompanyName}

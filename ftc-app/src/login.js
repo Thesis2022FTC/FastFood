@@ -34,6 +34,8 @@ const Login = () => {
                 // alert(errorMessage)
             });
     }
+
+    
     if (currentUser) {
         return <Redirect to={'/dashboard'} />
     }

@@ -8,13 +8,13 @@ const EmailVerification = () => {
     const auth = getAuth();
     const user = auth.currentUser;
 
-    const verifyNow = async(e) => {
+    const verifyNow = async (e) => {
         e.preventDefault();
-        try{
+        try {
             await sendEmailVerification(auth.currentUser)
             alert('Email Sent!')
             return <Redirect to={'/sign-in'} />
-        }catch(err){
+        } catch (err) {
             alert('Email already sent!!!')
         }
 
@@ -22,17 +22,17 @@ const EmailVerification = () => {
     }
 
     return (
-        <div className='container-fluid'>
+        <div className='auth-wrapper '>
+            <div className='auth-inner '>
             <p>Hi {user.displayName},</p><p>An email was sent to your address for verification. please check  the email:
                 {user.email}.
                 if you haven't received an email please click the Verify button.</p>
             <button className="btn btn-primary form-control" style={{ marginBottom: 10 }} onClick={verifyNow}>
                 Verify Now
             </button>
-            <button className="btn btn-primary form-control">
-                Sign In
-            </button>
+            
         </div>
+        </div >
     )
 
 
