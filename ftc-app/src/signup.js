@@ -24,17 +24,7 @@ const SignUp = () => {
         e.preventDefault();
         const user=auth.currentUser;
         const { email, password, fname, lname, phone, userType } = e.target.elements;
-        const profile = {
-            Firstname: fname.value,
-            Lastname: lname.value,
-            Displayname: fname.value + ' ' + lname.value,
-            Email: email.value,
-            Password: password.value,
-            PhoneNumber: phone.value,
-            UserType: userType.value,
-            uid:user.uid
-
-        }
+        
         try {
             await createUserWithEmailAndPassword(auth, email.value, password.value);
 
@@ -42,10 +32,23 @@ const SignUp = () => {
                 displayName: fname.value + ' ' + lname.value, photoURL: image
             })
             const user=auth.currentUser;
-            setDoc(doc(db, "userProfile", user.uid), profile);
+           
             await signInWithEmailAndPassword(auth, email.value, password.value)
+            
             setCurrentUser(true);
             dispatch(isUserLogin(true))
+            const profile = {
+                Firstname: fname.value,
+                Lastname: lname.value,
+                Displayname: fname.value + ' ' + lname.value,
+                Email: email.value,
+                Password: password.value,
+                PhoneNumber: phone.value,
+                UserType: userType.value,
+                uid:user.uid
+    
+            }
+            setDoc(doc(db, "userProfile", user.uid), profile);
             await sendEmailVerification(auth.currentUser)
             
         } catch (error) {
