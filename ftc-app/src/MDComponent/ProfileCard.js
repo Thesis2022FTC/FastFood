@@ -1,16 +1,17 @@
 import React from 'react';
 import { Card, Row, Col, ListGroup, ListGroupItem } from "react-bootstrap";
 
-const CardGrid = ({ fastfood }) => {
+const profileCard = ({ fastfood }) => {
 
   return (
-    <Row xs={2} md={3} className="g-4">
+    <Row xs={1} md={1} className="g-4">
       {fastfood.map((item, idx) => (
         <Col>
           <Card>
+          <Card.Header as="h5">{item.CompanyName}</Card.Header>
             <Card.Img variant="top" src={item.Logo} style={{ width: 200, height: 200, flex: 1, alignSelf: 'center', padding: 10 }} />
             <Card.Body>
-              <Card.Title>{item.CompanyName}</Card.Title>
+              <Card.Title>About Me</Card.Title>
               <Card.Text className='small'>
                 {item.Description}
               </Card.Text>
@@ -24,10 +25,10 @@ const CardGrid = ({ fastfood }) => {
               <ListGroupItem className='small'><strong>Parking Space:</strong> {item.ParkingSpace ? 'Yes' : 'No'}</ListGroupItem>
 
             </ListGroup>
-            <Card.Body>
-              <Card.Link href="#" className="btn btn-warning">Order Now</Card.Link>
-              {/* <Card.Link href="#" className="btn btn-success">Company Profile</Card.Link> */}
-            </Card.Body>
+            {/* <Card.Body>
+              <Card.Link href="#" className="btn btn-success">Go to Menu</Card.Link>
+              <Card.Link href="#" className="btn btn-success">Company Profile</Card.Link>
+            </Card.Body> */}
           </Card>
         </Col>
       ))}
@@ -35,4 +36,4 @@ const CardGrid = ({ fastfood }) => {
   )
 }
 
-export default CardGrid;
+export default profileCard;

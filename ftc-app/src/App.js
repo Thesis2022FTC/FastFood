@@ -7,10 +7,12 @@ import Login from "./login";
 import SignUp from "./signup";
 import Dashboard from './Dashboard';
 import Header from './header';
+
 import EmailVerification from './emailVerification';
 import Admin from './Admin'
-import Profile from './profile'
+import Profile from './Profile'
 import { getAuth } from 'firebase/auth'
+
 function App() {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -21,6 +23,7 @@ function App() {
       {/* {!isLogin?<Header />:null} */}
 
       {!user ? null : <Header />}
+     
       <Switch>
         <Route exact path='/' component={Login} />
         <Route path="/admin" component={Admin} />

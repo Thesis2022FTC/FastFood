@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Form, Row, Col, Button, Alert } from "react-bootstrap";
+import { Form, Row, Col, Button, Alert, ProgressBar, Container,Stack } from "react-bootstrap";
 import { getAuth } from "@firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc} from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import db from '../config';
 import { encode, decode } from 'js-base64';
-import { useSelector ,useDispatch} from "react-redux";
-import  { getStore} from "../redux/features/fastfood";
+import { useSelector, useDispatch } from "react-redux";
+import { clearStore, getStore } from "../redux/features/fastfood";
 
 const FormComponent = () => {
-    const dispatch=useDispatch()
-    const {fastfood}=useSelector(state=>state.fastfood)
+    const dispatch = useDispatch()
+    const { fastfood } = useSelector(state => state.fastfood)
     const auth = getAuth();
     const user = auth.currentUser;
     const storage = getStorage();
     const [url, setUrl] = useState('')
     const [srcFile, setSrcFile] = useState()
-    const [myProfile, setmyProfile] = useState(fastfood.filter(item=>item.uid==user.uid))
+    const [myProfile, setmyProfile] = useState(fastfood.filter(item => item.uid == user.uid))
     const [companyname, setCompanyName] = useState()
     const [seat, setSeat] = useState()
     const [fullname, setFullname] = useState()
@@ -29,7 +29,9 @@ const FormComponent = () => {
     const [startTime, setStarTime] = useState()
     const [endTime, setEndTime] = useState()
     const [description, setDescription] = useState()
-    console.log("MyProfile",myProfile)
+    const [prog, setProg] = useState(0)
+    const [visible, setVisible] = useState(false)
+    console.log("MyProfile", myProfile)
 
     let srcUrl = ''
     const metadata = {
@@ -37,7 +39,7 @@ const FormComponent = () => {
     };
 
     useEffect(() => {
-        setmyProfile(fastfood.filter(item=>item.uid==user.uid))
+        setmyProfile(fastfood.filter(item => item.uid == user.uid))
         setCompanyName(myProfile.length > 0 ? myProfile[0].CompanyName : null)
         setSeat(myProfile.length > 0 ? myProfile[0].Capacity : null)
         setFullname(myProfile.length > 0 ? myProfile[0].Manager : null)
@@ -52,11 +54,9 @@ const FormComponent = () => {
         setDescription(myProfile.length > 0 ? myProfile[0].Description : null)
     }, [fastfood])
 
-
+    console.log('Boolean:',parkspace,drivethru)
     const changeHandler = (event) => {
         setSrcFile(event.target.files[0]);
-
-
     };
     // console.log("Prof",myProfile[0][0].uid)
 
@@ -71,13 +71,13 @@ const FormComponent = () => {
             Manager: fullname,
             CreatedBy: user.uid,
             Description: description,
-            DriveThru: drivethru == 'on' ? true : false,
+            DriveThru: drivethru=='true'?true:false,
             Location: `${address1} ${address2} ${city} ${zip}`,
             Address1: address1,
             Address2: address2,
             City: city,
             Zip: zip,
-            ParkingSpace: parkspace == 'on' ? true : false,
+            ParkingSpace: parkspace=='true'?true:false,
             TimeStart: startTime,
             TimeClose: endTime,
             uid: user.uid
@@ -92,8 +92,10 @@ const FormComponent = () => {
             (snapshot) => {
                 // Observe state change events such as progress, pause, and resume
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+                setVisible(true)
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload is ' + progress + '% done');
+                setProg(progress)
                 switch (snapshot.state) {
                     case 'paused':
                         console.log('Upload is paused');
@@ -102,6 +104,7 @@ const FormComponent = () => {
                         console.log('Upload is running');
                         break;
                 }
+
 
             },
             (error) => {
@@ -117,10 +120,11 @@ const FormComponent = () => {
                     setTimeout(() => {
                         setDoc(doc(db, "fastfood", user.uid), company);
                         alert('Record has been saved!')
-                        dispatch(getStore(company))
+                        dispatch(clearStore())
+                        setVisible(false)
                     }, 3000);
                 });
-              
+
             }
         );
 
@@ -128,139 +132,151 @@ const FormComponent = () => {
     }
 
     return (
-        <div className="container auth-inner auth-wrapper" style={{ marginTop: 30 }}>
-            <Alert variant="light" className="text-center blockquote">Add New Company Here</Alert>
-            <Form onSubmit={handleSubmit}>
-                <Row className="mb-3">
-                    <Form.Group as={Col} controlId="formGridCompanyname">
-                        <Form.Label>Company Name</Form.Label>
-                        <Form.Control type="text" placeholder="Enter Company name" name='companyname' required value={companyname} onChange={(e) => setCompanyName(e.target.value)} />
-                    </Form.Group>
+        
+            <div className="container auth-inner auth-wrapper" style={{ marginTop: 30,  marginBottom:30}}>
+                <Alert variant="dark" className="text-center blockquote">Add/Update Company Information</Alert>
+                <Form onSubmit={handleSubmit}>
+                    <Row className="mb-3">
+                        <Form.Group as={Col} controlId="formGridCompanyname">
+                            <Form.Label>Company Name</Form.Label>
+                            <Form.Control type="text" placeholder="Enter Company name" name='companyname' required value={companyname} onChange={(e) => setCompanyName(e.target.value)} />
+                        </Form.Group>
 
-                    <Form.Group as={Col} controlId="formGridManager">
-                        <Form.Label>Manager's Name</Form.Label>
-                        <Form.Control type="text" placeholder="Full name" name='fullname' required value={fullname} onChange={(e) => setFullname(e.target.value)} />
-                    </Form.Group>
+                        <Form.Group as={Col} controlId="formGridManager">
+                            <Form.Label>Manager's Name</Form.Label>
+                            <Form.Control type="text" placeholder="Full name" name='fullname' required value={fullname} onChange={(e) => setFullname(e.target.value)} />
+                        </Form.Group>
 
-                    <Form.Group as={Col} controlId="formGridManager">
-                        <Form.Label>Seating Capacity</Form.Label>
-                        <Form.Control type="number" placeholder="Enter seat capacity" name='seat' defaultValue="0" required value={seat} onChange={(e) => setSeat(e.target.value)} />
+                        <Form.Group as={Col} controlId="formGridManager">
+                            <Form.Label>Seating Capacity</Form.Label>
+                            <Form.Control type="number" placeholder="Enter seat capacity" name='seat' defaultValue="0" required value={seat} onChange={(e) => setSeat(e.target.value)} />
+                        </Form.Group>
+                    </Row>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Company Short Description</Form.Label>
+                        <Form.Control type='text' as="textarea" rows={3} required name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
                     </Form.Group>
-                </Row>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Company Short Description</Form.Label>
-                    <Form.Control type='text' as="textarea" rows={3} required name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
-                </Form.Group>
-                <Row className='mb-3'>
-                    <Form.Group as={Col} controlId="formGridLocation">
-                        <Form.Label>Address</Form.Label>
-                        <Form.Control placeholder="1234 Main St" name='address1' required value={address1} onChange={(e) => setAddress1(e.target.value)} />
-                    </Form.Group>
+                    <Row className='mb-3'>
+                        <Form.Group as={Col} controlId="formGridLocation">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control placeholder="1234 Main St" name='address1' required value={address1} onChange={(e) => setAddress1(e.target.value)} />
+                        </Form.Group>
 
-                    <Form.Group as={Col} controlId="formGridLocation2">
-                        <Form.Label>Address 2</Form.Label>
-                        <Form.Control placeholder="Apartment, studio, or floor" name="address2" value={address2} onChange={(e) => setAddress2(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group as={Col} controlId="formGridCity">
-                        <Form.Label>City</Form.Label>
-                        <Form.Control type="text" placeholder="City" name="city" value={city} onChange={(e) => setCity(e.target.value)} />
-                    </Form.Group>
+                        <Form.Group as={Col} controlId="formGridLocation2">
+                            <Form.Label>Address 2</Form.Label>
+                            <Form.Control placeholder="Apartment, studio, or floor" name="address2" value={address2} onChange={(e) => setAddress2(e.target.value)} />
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="formGridCity">
+                            <Form.Label>City</Form.Label>
+                            <Form.Control type="text" placeholder="City" name="city" value={city} onChange={(e) => setCity(e.target.value)} />
+                        </Form.Group>
 
-                    <Form.Group as={Col} controlId="formGridZip">
-                        <Form.Label>Zip</Form.Label>
-                        <Form.Control type="number" placeholder="zip/postal code" name="zip" value={zip} onChange={(e) => setZip(e.target.value)} />
-                    </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                    <Form.Group as={Col} className="mb-3" id="formGridDrive">
-                        <Form.Label>Do you have Drive Thru?</Form.Label>
-                        <Form.Check type="radio" label="Yes" name="drivethru" required checked={drivethru ? true : false} onChange={(e) => setDriveThru(e.target.value)} />
-                        <Form.Check type="radio" label="No" name="drivethru" required checked={drivethru ? true : false} onChange={(e) => setDriveThru(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group as={Col} className="mb-3" id="formGridPark">
-                        <Form.Label>Do you have Parking Space?</Form.Label>
-                        <Form.Check type="radio" label="Yes" name="parkspace" required checked={parkspace ? true : false} onChange={(e) => setParkSpace(e.target.value)} />
-                        <Form.Check type="radio" label="No" name="parkspace" required checked={parkspace ? true : false} onChange={(e) => setParkSpace(e.target.value)} />
-                    </Form.Group>
-                    <Form.Group as={Col} className="mb-3" id="formGridTimeStart">
-                        <Form.Label>Store Opening Time</Form.Label>
-                        <Form.Select aria-label="Default select example" name="startTime" required value={startTime} onChange={(e) => setStarTime(e.target.value)}>
-                            <option>Select opening hour</option>
-                            <option value="12:00 am">12:00 am</option>
-                            <option value="1:00 am">1:00 am</option>
-                            <option value="2:00 am">2:00 am</option>
-                            <option value="3:00 am">3:00 am</option>
-                            <option value="4:00 am">4:00 am</option>
-                            <option value="5:00 am">5:00 am</option>
-                            <option value="6:00 am">6:00 am</option>
-                            <option value="7:00 am">7:00 am</option>
-                            <option value="8:00 am">8:00 am</option>
-                            <option value="9:00 am">9:00 am</option>
-                            <option value="10:00 am">10:00 am</option>
-                            <option value="11:00 am">11:00 am</option>
-                            <option value="12:00 pm">12:00 pm</option>
-                            <option value="1:00 pm">1:00 pm</option>
-                            <option value="2:00 pm">2:00 pm</option>
-                            <option value="3:00 pm">3:00 pm</option>
-                            <option value="4:00 pm">4:00 pm</option>
-                            <option value="5:00 pm">5:00 pm</option>
-                            <option value="6:00 pm">6:00 pm</option>
-                            <option value="7:00 pm">7:00 pm</option>
-                            <option value="8:00 pm">8:00 pm</option>
-                            <option value="9:00 pm">9:00 pm</option>
-                            <option value="10:00 pm">10:00 pm</option>
-                            <option value="11:00 pm">11:00 pm</option>
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group as={Col} className="mb-3" id="formGridTimeClose">
-                        <Form.Label>Store Closing time</Form.Label>
-                        <Form.Select aria-label="Default select example" name="endTime" required value={endTime} onChange={(e) => setEndTime(e.target.value)}>
-                            <option>Select closing hour</option>
-                            <option value="12:00 am">12:00 am</option>
-                            <option value="1:00 am">1:00 am</option>
-                            <option value="2:00 am">2:00 am</option>
-                            <option value="3:00 am">3:00 am</option>
-                            <option value="4:00 am">4:00 am</option>
-                            <option value="5:00 am">5:00 am</option>
-                            <option value="6:00 am">6:00 am</option>
-                            <option value="7:00 am">7:00 am</option>
-                            <option value="8:00 am">8:00 am</option>
-                            <option value="9:00 am">9:00 am</option>
-                            <option value="10:00 am">10:00 am</option>
-                            <option value="11:00 am">11:00 am</option>
-                            <option value="12:00 pm">12:00 pm</option>
-                            <option value="1:00 pm">1:00 pm</option>
-                            <option value="2:00 pm">2:00 pm</option>
-                            <option value="3:00 pm">3:00 pm</option>
-                            <option value="4:00 pm">4:00 pm</option>
-                            <option value="5:00 pm">5:00 pm</option>
-                            <option value="6:00 pm">6:00 pm</option>
-                            <option value="7:00 pm">7:00 pm</option>
-                            <option value="8:00 pm">8:00 pm</option>
-                            <option value="9:00 pm">9:00 pm</option>
-                            <option value="10:00 pm">10:00 pm</option>
-                            <option value="11:00 pm">11:00 pm</option>
+                        <Form.Group as={Col} controlId="formGridZip">
+                            <Form.Label>Zip</Form.Label>
+                            <Form.Control type="number" placeholder="zip/postal code" name="zip" value={zip} onChange={(e) => setZip(e.target.value)} />
+                        </Form.Group>
+                    </Row>
+                    <Row className="mb-3">
+                        <Form.Group as={Col} className="mb-3" id="formGridDrive">
+                            <Form.Label>Do you have Drive Thru?</Form.Label>
+                            <Form.Check type="radio" label="Yes" name="drivethru" required value={true}  onChange={(e) => setDriveThru(e.target.value)} />
+                            <Form.Check type="radio" label="No" name="drivethru" required value={false} onChange={(e) => setDriveThru(e.target.value)} />
+                        </Form.Group>
+                        <Form.Group as={Col} className="mb-3" id="formGridPark">
+                            <Form.Label>Do you have Parking Space?</Form.Label>
+                            <Form.Check type="radio" label="Yes" name="parkspace" required value={true} /* checked={parkspace==true} */ onChange={(e) => setParkSpace(e.target.value)} />
+                            <Form.Check type="radio" label="No" name="parkspace" required value={false} /* checked={parkspace==false} */ onChange={(e) => setParkSpace(e.target.value)} />
+                        </Form.Group>
+                        <Form.Group as={Col} className="mb-3" id="formGridTimeStart">
+                            <Form.Label>Store Opening Time</Form.Label>
+                            <Form.Select aria-label="Default select example" name="startTime" required value={startTime} onChange={(e) => setStarTime(e.target.value)}>
+                                <option>Select opening hour</option>
+                                <option value="12:00 am">12:00 am</option>
+                                <option value="1:00 am">1:00 am</option>
+                                <option value="2:00 am">2:00 am</option>
+                                <option value="3:00 am">3:00 am</option>
+                                <option value="4:00 am">4:00 am</option>
+                                <option value="5:00 am">5:00 am</option>
+                                <option value="6:00 am">6:00 am</option>
+                                <option value="7:00 am">7:00 am</option>
+                                <option value="8:00 am">8:00 am</option>
+                                <option value="9:00 am">9:00 am</option>
+                                <option value="10:00 am">10:00 am</option>
+                                <option value="11:00 am">11:00 am</option>
+                                <option value="12:00 pm">12:00 pm</option>
+                                <option value="1:00 pm">1:00 pm</option>
+                                <option value="2:00 pm">2:00 pm</option>
+                                <option value="3:00 pm">3:00 pm</option>
+                                <option value="4:00 pm">4:00 pm</option>
+                                <option value="5:00 pm">5:00 pm</option>
+                                <option value="6:00 pm">6:00 pm</option>
+                                <option value="7:00 pm">7:00 pm</option>
+                                <option value="8:00 pm">8:00 pm</option>
+                                <option value="9:00 pm">9:00 pm</option>
+                                <option value="10:00 pm">10:00 pm</option>
+                                <option value="11:00 pm">11:00 pm</option>
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group as={Col} className="mb-3" id="formGridTimeClose">
+                            <Form.Label>Store Closing time</Form.Label>
+                            <Form.Select aria-label="Default select example" name="endTime" required value={endTime} onChange={(e) => setEndTime(e.target.value)}>
+                                <option>Select closing hour</option>
+                                <option value="12:00 am">12:00 am</option>
+                                <option value="1:00 am">1:00 am</option>
+                                <option value="2:00 am">2:00 am</option>
+                                <option value="3:00 am">3:00 am</option>
+                                <option value="4:00 am">4:00 am</option>
+                                <option value="5:00 am">5:00 am</option>
+                                <option value="6:00 am">6:00 am</option>
+                                <option value="7:00 am">7:00 am</option>
+                                <option value="8:00 am">8:00 am</option>
+                                <option value="9:00 am">9:00 am</option>
+                                <option value="10:00 am">10:00 am</option>
+                                <option value="11:00 am">11:00 am</option>
+                                <option value="12:00 pm">12:00 pm</option>
+                                <option value="1:00 pm">1:00 pm</option>
+                                <option value="2:00 pm">2:00 pm</option>
+                                <option value="3:00 pm">3:00 pm</option>
+                                <option value="4:00 pm">4:00 pm</option>
+                                <option value="5:00 pm">5:00 pm</option>
+                                <option value="6:00 pm">6:00 pm</option>
+                                <option value="7:00 pm">7:00 pm</option>
+                                <option value="8:00 pm">8:00 pm</option>
+                                <option value="9:00 pm">9:00 pm</option>
+                                <option value="10:00 pm">10:00 pm</option>
+                                <option value="11:00 pm">11:00 pm</option>
 
-                        </Form.Select>
-                    </Form.Group>
-                    <Form.Group className="position-relative mb-3">
-                        <Form.Label>Upload Logo</Form.Label>
-                        <Form.Control
-                            type="file"
-                            required
-                            name="uploadFile"
-                            onChange={changeHandler}
-                            accept="image/*"
-                        />
-                    </Form.Group>
-                </Row>
-                <div className="text-center">
-                    <Button variant="primary" type="submit" >
-                        Save Now
-                    </Button>
-                </div>
-            </Form>
-        </div>
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="position-relative mb-3">
+                            <Form.Label>Upload Logo</Form.Label>
+                            <Form.Control
+                                type="file"
+                                required
+                                name="uploadFile"
+                                onChange={changeHandler}
+                                accept="image/*"
+                            />
+                        </Form.Group>
+                    </Row>
+                    {
+                        visible ?
+                            <ProgressBar style={{ marginTop: 10, marginBottom: 10 }} >
+                                <ProgressBar striped variant="success" now={prog} key={1} animated label={`${Math.floor(prog / 3)}%`} />
+                                <ProgressBar variant="warning" now={prog} key={2} animated label={`${Math.floor(prog / 1.5)}%`} />
+                                <ProgressBar striped variant="danger" now={prog} key={3} animated label={`${Math.floor(prog - 1)}%`} />
+                            </ProgressBar> : null
+                    }
+
+                    <div className="text-center">
+                        <Stack gap={2} className="col-md-5 mx-auto">
+                            <Button variant="secondary" type="submit">Save changes</Button>
+                            <Button variant="outline-secondary">Cancel</Button>
+                        </Stack>
+                    </div>
+                </Form>
+            </div>
+       
     )
 }
 
