@@ -18,7 +18,7 @@ const AddMenu = () => {
     const [srcFile, setSrcFile] = useState()
     const [visible, setVisible] = useState(false)
     const storage = getStorage();
-
+    const [prog, setProg] = useState(0)
     useEffect(() => {
         fetchMenu();
 
@@ -61,7 +61,7 @@ const AddMenu = () => {
                 setVisible(true)
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload is ' + progress + '% done');
-                // setProg(progress)
+                setProg(progress)
                 switch (snapshot.state) {
                     case 'paused':
                         console.log('Upload is paused');
@@ -86,15 +86,16 @@ const AddMenu = () => {
                     setTimeout(() => {
                         addDoc(collection(db, "menu"), productcategory);
                         alert('Record has been saved!')
+                        setVisible(false)
                         fetchMenu();
                     }, 3000);
                 });
 
             }
         );
-            setMenuName('');
-            setPrice('');
-            
+        setMenuName('');
+        setPrice('');
+
     }
 
     const changeHandler = (event) => {
@@ -128,10 +129,19 @@ const AddMenu = () => {
 
 
                 <div className="text-center" style={{ marginBottom: 30 }}>
+                    {
+                        visible ?
+                            <ProgressBar style={{ marginTop: 10, marginBottom: 10 }} >
+                                <ProgressBar striped variant="success" now={prog} key={1} animated label={`${Math.floor(prog / 3)}%`} />
+                                <ProgressBar variant="warning" now={prog} key={2} animated label={`${Math.floor(prog / 1.5)}%`} />
+                                <ProgressBar striped variant="danger" now={prog} key={3} animated label={`${Math.floor(prog - 1)}%`} />
+                            </ProgressBar> : null
+                    }
                     <Stack gap={2} className="col-md-5 mx-auto">
                         <Button variant="secondary" type="submit">Save it now!</Button>
 
                     </Stack>
+
                 </div>
             </Form>
 
