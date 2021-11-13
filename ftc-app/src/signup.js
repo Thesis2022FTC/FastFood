@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import firebaseConfig from "./config";
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth,RecaptchaVerifier , createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import Dashboard from "./Dashboard";
 import { useDispatch } from 'react-redux'
 import { getUser, clearUsers, isUserLogin } from './redux/features/userSlice'
@@ -14,7 +14,7 @@ const SignUp = () => {
     const [error, setError] = useState()
     let image = "https://firebasestorage.googleapis.com/v0/b/fastfood-queue.appspot.com/o/Jolibee%2FJollibee-logo.png?alt=media&token=3c45576b-bd03-4a27-8bb7-50f4e3279ee3"
     const auth = getAuth();
-    
+    auth.languageCode = 'it';
 
     useEffect(() => {
         dispatch(clearUsers())

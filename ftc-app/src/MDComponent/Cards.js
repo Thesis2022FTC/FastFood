@@ -1,7 +1,19 @@
+
 import React from 'react';
-import { Card, Row, Col, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Card, Row, Col, ListGroup, ListGroupItem, Button } from "react-bootstrap";
+import { Link, Redirect,useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getUid } from '../redux/features/fastfood';
 
 const CardGrid = ({ fastfood }) => {
+  const dispatch=useDispatch()
+  const history=useHistory()
+
+  const addToCart = (uid) => {
+      dispatch(getUid(uid))
+       history.push('/add-to-cart')
+      
+  }
 
   return (
     <Row xs={2} md={3} className="g-4">
@@ -25,7 +37,7 @@ const CardGrid = ({ fastfood }) => {
 
             </ListGroup>
             <Card.Body>
-              <Card.Link href="#" className="btn btn-warning">Order Now</Card.Link>
+              <Button variant='warning' onClick={()=>addToCart(item.uid)} className="btn btn-warning">Order Now</Button>
               {/* <Card.Link href="#" className="btn btn-success">Company Profile</Card.Link> */}
             </Card.Body>
           </Card>

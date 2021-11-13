@@ -7,6 +7,7 @@ import Login from "./login";
 import SignUp from "./signup";
 import Dashboard from './Dashboard';
 import Header from './header';
+import AddToCart from './Order/AddToCart'
 
 import EmailVerification from './emailVerification';
 import Admin from './Admin'
@@ -32,6 +33,7 @@ function App() {
         <Route path="/sign-up" component={SignUp} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/email-verification" component={EmailVerification} />
+        <Route path="/add-to-cart" component={AddToCart} />
 
       </Switch>
 

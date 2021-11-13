@@ -7,6 +7,7 @@ import { encode, decode } from 'js-base64';
 import { useSelector, useDispatch } from "react-redux";
 import MenuCard from "./MDComponent/MenuCard";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { v4 as uuidv4 } from 'uuid';
 
 const AddMenu = () => {
     const auth = getAuth();
@@ -45,6 +46,7 @@ const AddMenu = () => {
 
         // const base64Image=encode(uploadFile.files[0].name)
         const productcategory = {
+            menuID:uuidv4()
             MenuName: menuName,
             Price: price,
             uid: user.uid

@@ -12,11 +12,12 @@ import db from './config'
 const Header = () => {
     const history = useHistory()
     const { isLogin, users } = useSelector(state => state.user)
+    const { cart } = useSelector(state => state.cart)
     const [profile, setProfile] = useState([])
     const dispatch = useDispatch()
     const auth = getAuth();
     const user = auth.currentUser;
-
+    const[qty,setQty]=useState(0)
     useEffect(() => {
         let isSubscribed = true
         if (isSubscribed) {
@@ -26,6 +27,10 @@ const Header = () => {
         return () => isSubscribed = false
 
     }, [user.uid])
+
+    useEffect(()=>{
+        setQty(cart.length)
+    },[cart])
 
 
     const logout = (e) => {
@@ -65,8 +70,8 @@ const Header = () => {
                 <Nav>
                     {profile.UserType === 'Customer' ?
                         <Nav.Link eventKey={2} href="#">
-                            My Cart <Badge bg="secondary">0</Badge>
-                            <span className="visually-hidden">unread messages</span>
+                            My Cart <Badge bg="secondary">{qty}</Badge>
+                            <span className="visually-hidden">cart</span>
                         </Nav.Link> : null}
 
                     <NavDropdown title={<Avatar name={user.displayName} size="30" round={true} />} id="avatar-dropdown" style={{ marginRight: 20 }}>
