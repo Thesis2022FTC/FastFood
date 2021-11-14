@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { Container,Navbar,Tabs,Tab} from 'react-bootstrap'
 import Admin from "./Admin"
 import ProductTabs from "./ProductTabs";
-import Profile from './Profile'
+import Profile from './profile'
 
 const Sidebar = () => {
         const [key, setKey] = useState('profile');

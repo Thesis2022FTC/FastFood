@@ -11,7 +11,7 @@ import AddToCart from './Order/AddToCart'
 
 import EmailVerification from './emailVerification';
 import Admin from './Admin'
-import Profile from './Profile'
+import Profile from './profile'
 import { getAuth } from 'firebase/auth'
 
 function App() {

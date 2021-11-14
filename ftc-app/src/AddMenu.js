@@ -46,7 +46,7 @@ const AddMenu = () => {
 
         // const base64Image=encode(uploadFile.files[0].name)
         const productcategory = {
-            menuID:uuidv4()
+            menuID:uuidv4(),
             MenuName: menuName,
             Price: price,
             uid: user.uid
