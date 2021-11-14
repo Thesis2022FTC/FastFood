@@ -14,6 +14,7 @@ import EmailVerification from './emailVerification';
 import Admin from './Admin'
 import Profile from './profile'
 import { getAuth } from 'firebase/auth'
+import SuccessOrder from './Order/SuccessOrder';
 
 function App() {
   const auth = getAuth();
@@ -36,6 +37,7 @@ function App() {
         <Route path="/email-verification" component={EmailVerification} />
         <Route path="/add-to-cart" component={AddToCart} />
         <Route path="/my-cart" component={MyCart} />
+        <Route path="/success-page" component={SuccessOrder} />
       </Switch>
 
     </div></Router >

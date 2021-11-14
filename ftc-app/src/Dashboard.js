@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect,useHistory } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DataTable from './MDComponent/DataTable'
 import ControlledCarousel from "./MDComponent/Carousel";
@@ -9,15 +9,37 @@ import CardGrid from "./MDComponent/Cards";
 import Sidebar from './Sidebar'
 import db from './config';
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { clearStore, getStore } from "./redux/features/fastfood";
+import { getStore } from "./redux/features/fastfood";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
+    const history=useHistory()
     const { isLogin, isUserType } = useSelector(state => state.user)
     const [store, setStore] = useState([])
     const auth = getAuth();
     const user = auth.currentUser;
+  
+    onAuthStateChanged(auth, (userr) => {
+      if (userr) {
+        const uid = userr.uid;
+        
+      } else {
+        history.push('/sign-in')
+      }
+    });
+
+    if (user !== null) {
+        // The user object has basic properties such as display name, email, etc.
+        const displayName = user.displayName;
+        const email = user.email;
+        const photoURL = user.photoURL;
+        const emailVerified = user.emailVerified;
+        const uid = user.uid;
+        if(!emailVerified){
+            history.push('/email-verification')
+        }
+      }
 
     useEffect(() => {
         let isSubscribed = true

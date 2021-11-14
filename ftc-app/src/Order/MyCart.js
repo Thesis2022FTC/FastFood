@@ -35,7 +35,7 @@ const MyCart = () => {
         handleClose()
         handleSubmit()
         dispatch(clearCart())
-        history.push('/dashboard')
+        history.push('/success-page')
     }
 
     const handleSubmit = async () => {
