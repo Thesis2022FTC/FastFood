@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     users:[],
     isLogin:'false',
-    isUserType:''
+    isUserType:'Customer'
  
 }
 

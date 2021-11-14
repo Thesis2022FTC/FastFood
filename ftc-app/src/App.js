@@ -8,6 +8,7 @@ import SignUp from "./signup";
 import Dashboard from './Dashboard';
 import Header from './header';
 import AddToCart from './Order/AddToCart'
+import MyCart from './Order/MyCart';
 
 import EmailVerification from './emailVerification';
 import Admin from './Admin'
@@ -34,7 +35,7 @@ function App() {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/email-verification" component={EmailVerification} />
         <Route path="/add-to-cart" component={AddToCart} />
-
+        <Route path="/my-cart" component={MyCart} />
       </Switch>
 
     </div></Router >

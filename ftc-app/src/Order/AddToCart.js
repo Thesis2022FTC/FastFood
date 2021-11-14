@@ -9,8 +9,8 @@ import MenuCard from "../MDComponent/MenuCard";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const AddMenu = () => {
-    const {uid}=useSelector(state=>state.fastfood)
-    const auth = getAuth();   
+    const { uid } = useSelector(state => state.fastfood)
+    const auth = getAuth();
     const user = auth.currentUser;
     const [menu, setmenu] = useState([])
     const [menuName, setMenuName] = useState()
@@ -20,16 +20,16 @@ const AddMenu = () => {
     const [visible, setVisible] = useState(false)
     const storage = getStorage();
     const [prog, setProg] = useState(0)
-    
+
     useEffect(() => {
-        
+
         fetchMenu();
 
     }, []);
 
     const fetchMenu = async () => {
         // dispatch(clearStore())
-        const q = query(collection(db, "menu"), where("uid","==",uid));
+        const q = query(collection(db, "menu"), where("uid", "==", uid));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const menus = [];
             querySnapshot.forEach((doc) => {
@@ -44,10 +44,12 @@ const AddMenu = () => {
 
 
     return (
-        <div className="container auth-inner auth-wrapper" style={{ marginTop: 30, marginBottom: 30 }}>
-            <Alert variant="dark" className="text-center blockquote">ORDER NOW</Alert>
+        <div className="container " style={{ marginTop: 30, marginBottom: 30 }}>
+            <Alert variant="light" className="text-center blockquote">ORDER NOW</Alert>
+            <div className='container auth-inner auth-wrapper'>
+                <MenuCard menu={menu} />
+            </div>
 
-            <MenuCard menu={menu} />
 
         </div>
     )

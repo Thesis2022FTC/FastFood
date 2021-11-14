@@ -69,8 +69,8 @@ const Header = () => {
             return (
                 <Nav>
                     {profile.UserType === 'Customer' ?
-                        <Nav.Link eventKey={2} href="#">
-                            My Cart <Badge bg="secondary">{qty}</Badge>
+                        <Nav.Link eventKey={2} onClick={()=>history.push('/my-cart')}>
+                            My Cart <Badge bg="warning">{qty}</Badge>
                             <span className="visually-hidden">cart</span>
                         </Nav.Link> : null}
 

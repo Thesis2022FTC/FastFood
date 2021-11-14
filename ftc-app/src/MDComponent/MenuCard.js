@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, Row, Col, ListGroup, ListGroupItem , Button} from "react-bootstrap";
+import React,{useState} from 'react';
+import { Card, Row, Col, ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart } from '../redux/features/cartSlice';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -11,17 +11,19 @@ const MenuCard = ({ menu }) => {
   const dispatch = useDispatch()
   const auth = getAuth();
   const user = auth.currentUser;
+  const [disable, setDisable] = useState(false)
 
- 
 
   const addMenuToCart = (item) => {
     dispatch(addCart({
       cartID: item.menuID,
-      menuName: item.name,
-      Price: item.price,
+      menuName: item.MenuName,
+      Price: item.Price,
       Quantity: 1,
-      uid: user.uid
+      uid: user.uid,
+      Photo: item.Logo
     }))
+   
   }
 
   return (

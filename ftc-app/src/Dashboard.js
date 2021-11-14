@@ -57,7 +57,6 @@ const Dashboard = () => {
     return (
         <Container fluid >
             {isUserType.UserType == 'Customer' ?
-
                 <div className="container bg-light" style={{ marginTop: 30, paddingTop: 30 }}>
                     <div className="container-fluid bg-dark" > <ControlledCarousel fastfood={store} /></div>
                     <div style={{ marginTop: 50, paddingBottom: 50 }}>
