@@ -36,9 +36,9 @@ const Dashboard = () => {
         const photoURL = user.photoURL;
         const emailVerified = user.emailVerified;
         const uid = user.uid;
-        // if(!emailVerified){
-        //     history.push('/email-verification')
-        // }
+        if(!emailVerified){
+            history.push('/email-verification')
+        }
       }
 
     useEffect(() => {
