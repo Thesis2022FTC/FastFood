@@ -25,7 +25,7 @@ const EmailVerification = () => {
         <div className='auth-wrapper '>
             <div className='auth-inner '>
             <p>Hi {user.displayName},</p><p>An email was sent to your address for verification. please check  the email:
-                {user.email}.
+                {user.email}. After Verification, sign out and login again...
                 if you haven't received an email please click the Verify button.</p>
             <button className="btn btn-primary form-control" style={{ marginBottom: 10 }} onClick={verifyNow}>
                 Verify Now

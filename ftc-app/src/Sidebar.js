@@ -3,6 +3,7 @@ import { Container,Navbar,Tabs,Tab} from 'react-bootstrap'
 import Admin from "./Admin"
 import ProductTabs from "./ProductTabs";
 import Profile from './profile'
+import QrCode from './QrCode'
 
 const Sidebar = () => {
         const [key, setKey] = useState('profile');
@@ -22,6 +23,9 @@ const Sidebar = () => {
             </Tab>
             <Tab eventKey="product" title="Add Product">
              <ProductTabs/>
+            </Tab>
+            <Tab eventKey="qrcode" title="Scan Order">
+             <QrCode/>
             </Tab>
           </Tabs>
         );
