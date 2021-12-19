@@ -5,7 +5,7 @@ import AddCategory from "./MDComponent/AddCategory";
 import AddMenu from "./AddMenu";
 
 const ProductTabs = () => {
-    const [key, setKey] = useState('category');
+    const [key, setKey] = useState('menu');
 
     return (
         <Tabs
@@ -14,9 +14,9 @@ const ProductTabs = () => {
             onSelect={(k) => setKey(k)}
             className="mb-3"
         >
-            <Tab eventKey="category" title="Add Category">
+            {/* <Tab eventKey="category" title="Add Category">
                 <AddCategory />
-            </Tab>
+            </Tab> */}
             <Tab eventKey="menu" title="Add/Edit Menu">
                <AddMenu/>
             </Tab>

@@ -29,7 +29,7 @@ const CardGrid = ({ fastfood }) => {
             </Card.Body>
             <ListGroup className="list-group-flush">
               <ListGroupItem className='small'><strong>Location:</strong> {item.Location}</ListGroupItem>
-              <ListGroupItem className='small'><strong>Manager:</strong> {item.Manager}</ListGroupItem>
+              {/* <ListGroupItem className='small'><strong>Manager:</strong> {item.Manager}</ListGroupItem> */}
               <ListGroupItem className='small'><strong>Capacity:</strong> {item.Capacity} persons</ListGroupItem>
               <ListGroupItem className='small'><strong>Store Hours:</strong> {item.TimeStart + ' - ' + item.TimeClose} </ListGroupItem>
               <ListGroupItem className='small'><strong>Drive Thru:</strong> {item.Drivethru ? 'Yes' : 'No'} </ListGroupItem>

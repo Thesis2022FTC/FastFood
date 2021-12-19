@@ -7,7 +7,7 @@ const EmailVerification = () => {
     const { isLogin } = useSelector(state => state.user)
     const auth = getAuth();
     const user = auth.currentUser;
-
+    auth.languageCode = 'en';
     const verifyNow = async (e) => {
         e.preventDefault();
         try {

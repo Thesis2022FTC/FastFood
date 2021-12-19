@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect,useHistory } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { Link, Redirect, useHistory } from "react-router-dom";
+import { getAuth, onAuthStateChanged ,setPersistence, browserLocalPersistence } from "firebase/auth";
 import DataTable from './MDComponent/DataTable'
 import ControlledCarousel from "./MDComponent/Carousel";
 import CardGrid from "./MDComponent/Cards";
@@ -14,20 +14,20 @@ import { Container, Row, Col, Alert } from "react-bootstrap";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
-    const history=useHistory()
+    const history = useHistory()
     const { isLogin, isUserType } = useSelector(state => state.user)
     const [store, setStore] = useState([])
     const auth = getAuth();
     const user = auth.currentUser;
-  
-    onAuthStateChanged(auth, (userr) => {
-      if (userr) {
-        const uid = userr.uid;
-        
-      } else {
-        history.push('/sign-in')
-      }
-    });
+    setPersistence(auth, browserLocalPersistence);
+    // onAuthStateChanged(auth, (userr) => {
+    //     if (userr) {
+    //         const uid = userr.uid;
+ 
+    //     } else {
+    //         history.push('/sign-in')
+    //     }
+    // });
 
     if (user !== null) {
         // The user object has basic properties such as display name, email, etc.
@@ -36,10 +36,10 @@ const Dashboard = () => {
         const photoURL = user.photoURL;
         const emailVerified = user.emailVerified;
         const uid = user.uid;
-        if(!emailVerified){
+        if (!emailVerified) {
             history.push('/email-verification')
         }
-      }
+    }
 
     useEffect(() => {
         let isSubscribed = true
@@ -53,7 +53,17 @@ const Dashboard = () => {
 
     }, [user.uid])
 
+    const Footer = () => {
+        return (
+            <Row>
+                <Alert variant='secondary'>
+                    <p>FTC Queuing System</p>
+                    <i class="fa fa-assistive-listening-systems" aria-hidden="true">Copyright 2021-Dan Corp</i>
+                </Alert>
+            </Row>
 
+        )
+    }
 
     const fetchStore = async () => {
         // dispatch(clearStore())
@@ -73,33 +83,38 @@ const Dashboard = () => {
     if (!isLogin) {
         return <Redirect to={'/sign-in'} />
     }
+    const ReturnDashNoard = () => {
+        if (isUserType.UserType == 'Customer') {
+            return (
+                <Container fluid >
+                    <div className="container bg-light" style={{ marginTop: 30, paddingTop: 30 }}>
+                        <div className="container-fluid bg-dark" > <ControlledCarousel fastfood={store} /></div>
+                        <div style={{ marginTop: 50, paddingBottom: 50 }}>
+                            <CardGrid fastfood={store} />
+                        </div>
+                    </div>
+                    <Footer />
+                </Container >
 
+            )
 
+        } else {
+            return (
+                <Container fluid >
+                    <div className="container bg-dark" style={{ marginTop: 30, paddingTop: 30, marginBottom: 110 }}>
+                        <Row>
+                            <Col><Sidebar usertype={isUserType.UserType} /></Col>
+                        </Row>
+                    </div>
+                    <Footer />
+                </Container>
+
+            )
+        }
+    }
 
     return (
-        <Container fluid >
-            {isUserType.UserType == 'Customer' ?
-                <div className="container bg-light" style={{ marginTop: 30, paddingTop: 30 }}>
-                    <div className="container-fluid bg-dark" > <ControlledCarousel fastfood={store} /></div>
-                    <div style={{ marginTop: 50, paddingBottom: 50 }}>
-                        <CardGrid fastfood={store} />
-                    </div>
-                </div> :
-
-                <div className="container bg-dark" style={{ marginTop: 30, paddingTop: 30, marginBottom: 110 }}>
-                    <Row>
-                        <Col><Sidebar /></Col>
-                    </Row>
-
-                </div>}
-            <Row>
-                <Alert variant='secondary'>
-                    <p>FTC Queuing System</p>
-                    <i class="fa fa-assistive-listening-systems" aria-hidden="true">Copyright 2021-Dan Corp</i>
-                </Alert>
-            </Row>
-        </Container>
-
+        <ReturnDashNoard />
     )
 }
 

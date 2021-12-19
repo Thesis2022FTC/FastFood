@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import firebaseConfig from "./config";
-import { getAuth,RecaptchaVerifier , createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, RecaptchaVerifier, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import Dashboard from "./Dashboard";
 import { useDispatch } from 'react-redux'
 import { getUser, clearUsers, isUserLogin } from './redux/features/userSlice'
@@ -22,19 +22,19 @@ const SignUp = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const user=auth.currentUser;
+        const user = auth.currentUser;
         const { email, password, fname, lname, phone, userType } = e.target.elements;
-        
+
         try {
             await createUserWithEmailAndPassword(auth, email.value, password.value);
 
             await updateProfile(auth.currentUser, {
                 displayName: fname.value + ' ' + lname.value, photoURL: image
             })
-            const user=auth.currentUser;
-           
+            const user = auth.currentUser;
+
             await signInWithEmailAndPassword(auth, email.value, password.value)
-            
+
             setCurrentUser(true);
             dispatch(isUserLogin(true))
             const profile = {
@@ -45,12 +45,12 @@ const SignUp = () => {
                 Password: password.value,
                 PhoneNumber: phone.value,
                 UserType: userType.value,
-                uid:user.uid
-    
+                uid: user.uid
+
             }
             setDoc(doc(db, "userProfile", user.uid), profile);
             await sendEmailVerification(auth.currentUser)
-            
+
         } catch (error) {
             setError(error.message)
         }
@@ -101,12 +101,15 @@ const SignUp = () => {
                     </div>
                     <label>What type of use are you?</label>
                     <div className="form-group">
-                        <label for="manager" style={{marginTop:5,marginRight:10}}>
-                            <input type="radio" value="Manager" required  id="manager" name="userType" style={{marginRight:3, marginBottom:3}}/>
-                            Manager</label> 
+                        <label for="manager" style={{ marginTop: 5, marginRight: 10 }}>
+                            <input type="radio" value="Manager" required id="manager" name="userType" style={{ marginRight: 3, marginBottom: 3 }} />
+                            Manager</label>
+                        <label for="manager" style={{ marginTop: 5, marginRight: 10 }}>
+                            <input type="radio" value="Cashier" required id="cashier" name="userType" style={{ marginRight: 3, marginBottom: 3 }} />
+                            Cashier</label>
 
-                        <label for="customer" style={{marginTop:5,marginRight:10}}>
-                            <input type="radio" value="Customer" required  id="customer" name="userType" style={{marginRight:3, marginBottom:3}}/>
+                        <label for="customer" style={{ marginTop: 5, marginRight: 10 }}>
+                            <input type="radio" value="Customer" required id="customer" name="userType" style={{ marginRight: 3, marginBottom: 3 }} />
                             Customer</label>
                     </div>
 

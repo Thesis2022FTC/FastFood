@@ -74,7 +74,7 @@ const AddCategory = () => {
                     <tr>
                         <th>#</th>
                         <th>Category Name</th>
-                        <th colSpan="3" >Actions</th>
+                        {/* <th colSpan="3" >Actions</th> */}
                     </tr>
                 </thead>
                 <tbody>
@@ -83,7 +83,7 @@ const AddCategory = () => {
                             <tr>
                                 <td>{index+1}</td>
                                 <td>{item.CategoryName}</td>
-                                <td ><Button variant="success">Add Meal</Button></td>
+                                 {/* <td ><Button variant="success">Add Meal</Button></td> */}
                                 {/* <td ><Button variant="success">Edit </Button></td>
                                 <td ><Button variant="success">Del</Button></td> */}
                             </tr>

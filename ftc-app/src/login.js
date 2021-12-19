@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { clearUsers, getUser, isUserLogin } from './redux/features/userSlice'
 import firebaseConfig from "./config";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword ,setPersistence, browserLocalPersistence } from "firebase/auth";
 import { Link, Redirect } from "react-router-dom";
 
 
@@ -13,6 +13,9 @@ const Login = () => {
     const [email, setEmail] = useState()
     const [error, setError] = useState();
     const [verify, setVerify] = useState(false)
+    setPersistence(auth, browserLocalPersistence);
+
+
     useEffect(() => {
         // dispatch(clearUsers())
     }, [])
@@ -74,7 +77,7 @@ const Login = () => {
                         <button style={{ marginTop: 20 }} type="submit" className="btn btn-primary form-control">Sign in</button>
                     </div>
                     <p className="forgot-password text-right">
-                        Forgot <a href="#">password?</a>
+                        Forgot <a href="/reset-pass">password?</a>
                     </p>
                     <p className="forgot-password text-right">
 

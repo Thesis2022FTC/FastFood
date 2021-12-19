@@ -15,6 +15,7 @@ import Admin from './Admin'
 import Profile from './profile'
 import { getAuth } from 'firebase/auth'
 import SuccessOrder from './Order/SuccessOrder';
+import ResetPassword from './ForgotPassword';
 
 function App() {
   const auth = getAuth();
@@ -38,6 +39,7 @@ function App() {
         <Route path="/add-to-cart" component={AddToCart} />
         <Route path="/my-cart" component={MyCart} />
         <Route path="/success-page" component={SuccessOrder} />
+        <Route path="/reset-pass" component={ResetPassword} />
       </Switch>
 
     </div></Router >
