@@ -9,14 +9,12 @@ const Profile = () => {
     const [store, setStore] = useState([])
     const auth = getAuth();
     const user = auth.currentUser;
+
     useEffect(() => {
-        let isSubscribed = true
-        if (isSubscribed) {
-            // dispatch(getUser(user))
+        if(user){
             fetchStore();
         }
-
-        return () => isSubscribed = false
+       
 
     }, [])
 

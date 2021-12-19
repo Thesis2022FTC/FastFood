@@ -23,7 +23,7 @@ const Dashboard = () => {
     // onAuthStateChanged(auth, (userr) => {
     //     if (userr) {
     //         const uid = userr.uid;
- 
+
     //     } else {
     //         history.push('/sign-in')
     //     }
@@ -42,16 +42,28 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        let isSubscribed = true
-        if (isSubscribed) {
-            // dispatch(getUser(user))
-            fetchStore();
+        if (user) {
+            // let isSubscribed = true
+            // if (isSubscribed) {
+                // dispatch(getUser(user))
+                fetchStore();
+                const displayName = user.displayName;
+                const email = user.email;
+                const photoURL = user.photoURL;
+                const emailVerified = user.emailVerified;
+                const uid = user.uid;
+                if (!emailVerified) {
+                    history.push('/email-verification')
+                }
+            // }
 
+            // return () => isSubscribed = false
+        } else {
+            history.push('/sign-in')
         }
 
-        return () => isSubscribed = false
 
-    }, [user.uid])
+    }, [])
 
     const Footer = () => {
         return (

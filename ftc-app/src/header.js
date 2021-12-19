@@ -19,14 +19,12 @@ const Header = () => {
     const user = auth.currentUser;
     const[qty,setQty]=useState(0)
     useEffect(() => {
-        let isSubscribed = true
-        if (isSubscribed) {
-            // dispatch(getUser(user))
-            fetchUserProfile();
-        }
-        return () => isSubscribed = false
-
-    }, [user.uid])
+       if(user){
+        fetchUserProfile();
+       }
+           
+    
+    }, [])
 
     useEffect(()=>{
         setQty(cart.length)
