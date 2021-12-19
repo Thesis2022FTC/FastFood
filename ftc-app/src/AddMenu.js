@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Row, Col, Button, Alert, ProgressBar, Container, Stack, Table } from "react-bootstrap";
 import { getAuth } from "@firebase/auth";
-import { doc, setDoc, collection, query, where, onSnapshot, addDoc } from "firebase/firestore";
+import { doc, setDoc, collection, query, where, onSnapshot, addDoc  } from "firebase/firestore";
 import db from './config';
 import { encode, decode } from 'js-base64';
 import { useSelector, useDispatch } from "react-redux";
@@ -39,6 +39,8 @@ const AddMenu = () => {
         });
 
     }
+
+ 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -86,7 +88,7 @@ const AddMenu = () => {
                     console.log('File available at', downloadURL);
                     productcategory['Logo'] = downloadURL
                     setTimeout(() => {
-                        addDoc(collection(db, "menu"), productcategory);
+                        setDoc(doc(db, "menu",productcategory.menuID), productcategory);
                         alert('Record has been saved!')
                         setVisible(false)
                         fetchMenu();

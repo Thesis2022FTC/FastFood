@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Redirect, useHistory } from "react-router-dom";
-import { getAuth, onAuthStateChanged ,setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DataTable from './MDComponent/DataTable'
 import ControlledCarousel from "./MDComponent/Carousel";
 import CardGrid from "./MDComponent/Cards";
@@ -19,7 +19,7 @@ const Dashboard = () => {
     const [store, setStore] = useState([])
     const auth = getAuth();
     const user = auth.currentUser;
-    setPersistence(auth, browserLocalPersistence);
+
     // onAuthStateChanged(auth, (userr) => {
     //     if (userr) {
     //         const uid = userr.uid;

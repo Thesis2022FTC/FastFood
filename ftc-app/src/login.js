@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { clearUsers, getUser, isUserLogin } from './redux/features/userSlice'
 import firebaseConfig from "./config";
-import { getAuth, signInWithEmailAndPassword ,setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { Link, Redirect } from "react-router-dom";
 
 
@@ -13,7 +13,7 @@ const Login = () => {
     const [email, setEmail] = useState()
     const [error, setError] = useState();
     const [verify, setVerify] = useState(false)
-    setPersistence(auth, browserLocalPersistence);
+
 
 
     useEffect(() => {
@@ -24,6 +24,7 @@ const Login = () => {
         e.preventDefault();
         const { email, password } = e.target.elements;
         const user = auth.currentUser;
+        setPersistence(auth, browserLocalPersistence);
         signInWithEmailAndPassword(auth, email.value, password.value)
             .then(() => {
                 // Signed in 
@@ -38,7 +39,7 @@ const Login = () => {
             });
     }
 
-    
+
     if (currentUser) {
         return <Redirect to={'/dashboard'} />
     }

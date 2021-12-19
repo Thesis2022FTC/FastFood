@@ -1,10 +1,11 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { Card, Row, Col, ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart } from '../redux/features/cartSlice';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
+import db from '../config';
 
 const MenuCard = ({ menu }) => {
   const { isLogin, isUserType } = useSelector(state => state.user)
@@ -13,6 +14,12 @@ const MenuCard = ({ menu }) => {
   const user = auth.currentUser;
   const [disable, setDisable] = useState(false)
 
+  const deleteMenu = async (item) => {
+    await deleteDoc(doc(db, "menu", item))
+    //   alert('Deleted')
+    
+   alert('Successfully Deleted!')
+  }
 
   const addMenuToCart = (item) => {
     dispatch(addCart({
@@ -23,7 +30,7 @@ const MenuCard = ({ menu }) => {
       uid: user.uid,
       Photo: item.Logo
     }))
-   
+
   }
 
   return (
@@ -44,8 +51,8 @@ const MenuCard = ({ menu }) => {
                 <Button variant='warning' onClick={() => addMenuToCart(item)} className="btn btn-warning">Add to Cart</Button>
               </Card.Body> :
               <Card.Body>
-                <Card.Link href="#" className="btn btn-warning">Edit</Card.Link>
-                <Card.Link href="#" className="btn btn-danger">Delete</Card.Link>
+                {/* <Card.Link href="#" className="btn btn-warning" >Edit</Card.Link> */}
+                <Card.Link className="btn btn-danger" onClick={() => { deleteMenu(item.menuID) }}> Delete</Card.Link>
               </Card.Body>
             }
           </Card>
