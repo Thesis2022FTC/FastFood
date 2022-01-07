@@ -19,7 +19,7 @@ const Dashboard = () => {
     const [store, setStore] = useState([])
     const auth = getAuth();
     const user = auth.currentUser;
-
+    const [profile, setProfile] = useState([])
     // onAuthStateChanged(auth, (userr) => {
     //     if (userr) {
     //         const uid = userr.uid;
@@ -28,6 +28,18 @@ const Dashboard = () => {
     //         history.push('/sign-in')
     //     }
     // });
+    const fetchUserProfile = async () => {
+        const q = query(collection(db, "userProfile"), where("uid", "==", user.uid));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const userProfile = [];
+            querySnapshot.forEach((doc) => {
+                setProfile(doc.data())
+                // dispatch(isUser(doc.data()))
+            });
+        });
+
+
+    }
 
     if (user !== null) {
         // The user object has basic properties such as display name, email, etc.
@@ -46,6 +58,7 @@ const Dashboard = () => {
             // let isSubscribed = true
             // if (isSubscribed) {
                 // dispatch(getUser(user))
+                fetchUserProfile();
                 fetchStore();
                 const displayName = user.displayName;
                 const email = user.email;
@@ -57,7 +70,7 @@ const Dashboard = () => {
                 }
             // }
 
-            // return () => isSubscribed = false
+            // return () => isSubscribed = f    alse
         } else {
             history.push('/sign-in')
         }
@@ -96,7 +109,7 @@ const Dashboard = () => {
         return <Redirect to={'/sign-in'} />
     }
     const ReturnDashNoard = () => {
-        if (isUserType.UserType == 'Customer') {
+        if (profile.UserType == 'Customer') {
             return (
                 <Container fluid >
                     <div className="container bg-light" style={{ marginTop: 30, paddingTop: 30 }}>
@@ -115,7 +128,7 @@ const Dashboard = () => {
                 <Container fluid >
                     <div className="container bg-dark" style={{ marginTop: 30, paddingTop: 30, marginBottom: 110 }}>
                         <Row>
-                            <Col><Sidebar usertype={isUserType.UserType} /></Col>
+                            <Col><Sidebar usertype={profile.UserType} /></Col>
                         </Row>
                     </div>
                     <Footer />

@@ -14,10 +14,8 @@ const Login = () => {
     const [error, setError] = useState();
     const [verify, setVerify] = useState(false)
 
-
-
     useEffect(() => {
-        // dispatch(clearUsers())
+        //  dispatch(clearUsers())
     }, [])
 
     const handleLogin = (e) => {

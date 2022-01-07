@@ -42,7 +42,7 @@ const FormComponent = () => {
         setmyProfile(fastfood.filter(item => item.uid == user.uid))
         setCompanyName(myProfile.length > 0 ? myProfile[0].CompanyName : null)
         setSeat(myProfile.length > 0 ? myProfile[0].Capacity : null)
-        setFullname(myProfile.length > 0 ? myProfile[0].Manager : null)
+        // setFullname(myProfile.length > 0 ? myProfile[0].Manager : null)
         setAddress1(myProfile.length > 0 ? myProfile[0].Address1 : null)
         setAddress2(myProfile.length > 0 ? myProfile[0].Address2 : null)
         setCity(myProfile.length > 0 ? myProfile[0].City : null)
@@ -68,16 +68,16 @@ const FormComponent = () => {
         const company = {
             CompanyName: companyname,
             Capacity: seat,
-            Manager: fullname,
+            Manager: 'Dan Delo Santos',
             CreatedBy: user.uid,
             Description: description,
-            DriveThru: drivethru=='true'?true:false,
+            DriveThru: drivethru?true:false,
             Location: `${address1} ${address2} ${city} ${zip}`,
             Address1: address1,
             Address2: address2,
             City: city,
             Zip: zip,
-            ParkingSpace: parkspace=='true'?true:false,
+            ParkingSpace: parkspace?true:false,
             TimeStart: startTime,
             TimeClose: endTime,
             uid: user.uid
@@ -142,10 +142,10 @@ const FormComponent = () => {
                             <Form.Control type="text" placeholder="Enter Company name" name='companyname' required value={companyname} onChange={(e) => setCompanyName(e.target.value)} />
                         </Form.Group>
 
-                        <Form.Group as={Col} controlId="formGridManager">
+                        {/* <Form.Group as={Col} controlId="formGridManager">
                             <Form.Label>Manager's Name</Form.Label>
                             <Form.Control type="text" placeholder="Full name" name='fullname' required value={fullname} onChange={(e) => setFullname(e.target.value)} />
-                        </Form.Group>
+                        </Form.Group> */}
 
                         <Form.Group as={Col} controlId="formGridManager">
                             <Form.Label>Seating Capacity</Form.Label>

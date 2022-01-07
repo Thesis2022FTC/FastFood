@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 import { clearUsers, getUser, isUserLogin, isUser } from './redux/features/userSlice'
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { Navbar, Container, Nav, NavDropdown, Badge } from 'react-bootstrap'
+import { Navbar, Container, Nav, NavDropdown, Badge, Button } from 'react-bootstrap'
 import Avatar from 'react-avatar';
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import db from './config'
-
+import { MdHomeFilled, MdOutlineArrowBackIos ,MdOutlineShoppingCart} from "react-icons/md";
 const Header = () => {
     const history = useHistory()
     const { isLogin, users } = useSelector(state => state.user)
@@ -17,18 +17,18 @@ const Header = () => {
     const dispatch = useDispatch()
     const auth = getAuth();
     const user = auth.currentUser;
-    const[qty,setQty]=useState(0)
+    const [qty, setQty] = useState(0)
     useEffect(() => {
-       if(user){
-        fetchUserProfile();
-       }
-           
-    
-    }, [])
+        if (user) {
+            fetchUserProfile();
+        }
 
-    useEffect(()=>{
+
+    }, [user])
+
+    useEffect(() => {
         setQty(cart.length)
-    },[cart])
+    }, [cart])
 
 
     const logout = (e) => {
@@ -36,7 +36,6 @@ const Header = () => {
         alert("Sign out now?")
         dispatch(clearUsers())
         signOut(auth)
-
     }
 
     const fetchUserProfile = async () => {
@@ -66,9 +65,15 @@ const Header = () => {
             // dispatch(getUser(user))
             return (
                 <Nav>
+                   
+                    <Nav.Link eventKey={2} onClick={() => history.goBack()}>
+                        <p><MdOutlineArrowBackIos color="#fff" /></p>
+                    </Nav.Link>
+
                     {profile.UserType === 'Customer' ?
-                        <Nav.Link eventKey={2} onClick={()=>history.push('/my-cart')}>
-                            My Cart <Badge bg="warning">{qty}</Badge>
+
+                        <Nav.Link eventKey={2} onClick={() => history.push('/my-cart')}>
+                           <MdOutlineShoppingCart color="tomato"/>  <Badge bg="warning">{qty}</Badge>
                             <span className="visually-hidden">cart</span>
                         </Nav.Link> : null}
 
@@ -91,13 +96,10 @@ const Header = () => {
 
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="#">FTC Queuing System</Navbar.Brand>
+                <Navbar.Brand><MdHomeFilled /><Button variant="dark" onClick={() => history.push('/dashboard')}>Home</Button></Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-
-
-
                     </Nav>
                     <NavBarLogin />
                 </Navbar.Collapse>

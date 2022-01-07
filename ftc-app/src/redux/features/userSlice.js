@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     users:[],
     isLogin:'false',
-    isUserType:'Customer'
+    isUserType:''
  
 }
 
@@ -18,6 +18,7 @@ export const userSlice = createSlice({
     clearUsers: (state,action) => {
       // state.users=action.payload
       state.isLogin=false
+      state.isUserType=''
     },
     isUserLogin:(state,action)=>{
       state.isLogin=action.payload
