@@ -50,8 +50,8 @@ const Login = () => {
     }
 
     return (
-        <div className="auth-wrapper">
-            <div className="auth-inner">
+        <div className="auth-wrapper" style={{backgroundColor:'#FCF3CF'}}>
+            <div className="auth-inner" style={{backgroundColor:'#F9E79F'}}>
                 <form onSubmit={handleLogin}>
                     <h3>Sign In</h3>
 

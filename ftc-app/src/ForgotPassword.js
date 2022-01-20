@@ -21,8 +21,8 @@ const ResetPassword = () => {
     }
 
     return (
-        <div className="auth-wrapper">
-            <div className="auth-inner">
+        <div className="auth-wrapper" style={{backgroundColor:'#FCF3CF'}}>
+        <div className="auth-inner" style={{backgroundColor:'#F9E79F'}}>
                 <form onSubmit={resetNow}>
                     <h3>Reset Password</h3>
 

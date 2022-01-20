@@ -94,11 +94,10 @@ const Dashboard = () => {
     const Footer = () => {
         return (
            
-            <Row>
-                
-                <Alert variant='secondary'>
-                    <p>FTC Queuing System</p>
-                    <i class="fa fa-assistive-listening-systems" aria-hidden="true">Copyright 2022-Dan Corp</i>
+            <Row style={{backgroundColor:'#FCF3CF'}}>
+                <Alert style={{backgroundColor:'#F39C12'}}>
+                    <p style={{color:'#FFF'}}>FTC Queuing System</p>
+                    <i style={{color:'#FFF'}} class="fa fa-assistive-listening-systems" aria-hidden="true">Copyright 2022-Dan Corp</i>
                 </Alert>
                 </Row>
                 

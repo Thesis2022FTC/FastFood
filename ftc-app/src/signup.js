@@ -70,8 +70,8 @@ const SignUp = () => {
 
 
     return (
-        <div className="auth-wrapper">
-            <div className="auth-inner">
+        <div className="auth-wrapper" style={{backgroundColor:'#FCF3CF'}}>
+            <div className="auth-inner" style={{backgroundColor:'#F9E79F'}}>
                 <form onSubmit={handleSubmit}>
                     <h3>Sign Up</h3>
 
