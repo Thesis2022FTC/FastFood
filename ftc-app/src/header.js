@@ -64,7 +64,7 @@ const Header = () => {
         else {
             // dispatch(getUser(user))
             return (
-                <Nav>
+                <Nav >
                    
                     <Nav.Link eventKey={2} onClick={() => history.goBack()}>
                         <p><MdOutlineArrowBackIos color="#fff" /></p>
@@ -94,9 +94,9 @@ const Header = () => {
 
     return (
 
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar collapseOnSelect expand="lg" /* bg="light" variant="light"  */style={{backgroundColor:'#F39C12'/* backgroundImage: `url(${background})`, resizeMode:'contains' */}} >
             <Container>
-                <Navbar.Brand><MdHomeFilled /><Button variant="dark" onClick={() => history.push('/dashboard')}>Home</Button></Navbar.Brand>
+                <Navbar.Brand><MdHomeFilled /><Button variant="light" style={{backgroundColor:'#F39C12'}} onClick={() => history.push('/dashboard')}>Home</Button></Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">

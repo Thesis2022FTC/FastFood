@@ -5,7 +5,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import DataTable from './MDComponent/DataTable'
 import ControlledCarousel from "./MDComponent/Carousel";
 import CardGrid from "./MDComponent/Cards";
-
+import background from "./assets/bg3.jpg";
 import Sidebar from './Sidebar'
 import db from './config';
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -17,6 +17,7 @@ const Dashboard = () => {
     const history = useHistory()
     const { isLogin, isUserType } = useSelector(state => state.user)
     const [store, setStore] = useState([])
+    const [slider,setSlider]=useState([])
     const auth = getAuth();
     const user = auth.currentUser;
     const [profile, setProfile] = useState([])
@@ -37,9 +38,8 @@ const Dashboard = () => {
                 // dispatch(isUser(doc.data()))
             });
         });
-
-
     }
+   
 
     if (user !== null) {
         // The user object has basic properties such as display name, email, etc.
@@ -60,6 +60,7 @@ const Dashboard = () => {
                 // dispatch(getUser(user))
                 fetchUserProfile();
                 fetchStore();
+                fetchSlider();
                 const displayName = user.displayName;
                 const email = user.email;
                 const photoURL = user.photoURL;
@@ -80,12 +81,15 @@ const Dashboard = () => {
 
     const Footer = () => {
         return (
+           
             <Row>
+                
                 <Alert variant='secondary'>
                     <p>FTC Queuing System</p>
-                    <i class="fa fa-assistive-listening-systems" aria-hidden="true">Copyright 2021-Dan Corp</i>
+                    <i class="fa fa-assistive-listening-systems" aria-hidden="true">Copyright 2022-Dan Corp</i>
                 </Alert>
-            </Row>
+                </Row>
+                
 
         )
     }
@@ -105,18 +109,35 @@ const Dashboard = () => {
         });
 
     }
+
+    
+    const fetchSlider = async () => {
+        const q = query(collection(db, "slider"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+           const sliders = [];
+            querySnapshot.forEach((doc) => {
+                sliders.push(doc.data());
+                
+            });
+            setSlider(sliders)
+            console.log('SLIDERS', slider)
+        });
+    }
+
     if (!isLogin) {
         return <Redirect to={'/sign-in'} />
     }
     const ReturnDashNoard = () => {
         if (profile.UserType == 'Customer') {
             return (
-                <Container fluid >
-                    <div className="container bg-light" style={{ marginTop: 30, paddingTop: 30 }}>
-                        <div className="container-fluid bg-dark" > <ControlledCarousel fastfood={store} /></div>
-                        <div style={{ marginTop: 50, paddingBottom: 50 }}>
+                <Container fluid style={{backgroundColor:'#FCF3CF'/* backgroundImage: `url(${background})`, resizeMode:'contains' */}} >
+                    <div style={{marginTop:24, backgroundColor:'#F39C12'}}> <ControlledCarousel slider={slider} /></div>
+                    <div className="container" style={{ padding: 30, }}>
+                       
+                        <div style={{backgroundColor:'red'}}  style={{ marginTop: 50, paddingBottom: 50 }}>
                             <CardGrid fastfood={store} />
                         </div>
+                        
                     </div>
                     <Footer />
                 </Container >
@@ -139,7 +160,9 @@ const Dashboard = () => {
     }
 
     return (
+        
         <ReturnDashNoard />
+       
     )
 }
 
