@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   fastfood: [],
-  uid: ''
-
+  uid: '',
+ sliders:''
 }
 
 export const fastfoodSlice = createSlice({
@@ -13,6 +13,10 @@ export const fastfoodSlice = createSlice({
     getStore: (state, action) => {
       state.fastfood = state.fastfood.concat(action.payload)
       console.log('Store:', JSON.stringify(state.fastfood))
+    },
+    getSliders: (state, action) => {
+      state.sliders = state.sliders.concat(action.payload)
+     
     },
     getUid: (state, action) => {
       state.uid = action.payload
@@ -25,6 +29,6 @@ export const fastfoodSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { getStore, clearStore,getUid } = fastfoodSlice.actions
+export const { getStore, clearStore,getUid,getSliders} = fastfoodSlice.actions
 
 export default fastfoodSlice.reducer

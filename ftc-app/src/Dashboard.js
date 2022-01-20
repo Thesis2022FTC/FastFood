@@ -9,13 +9,14 @@ import background from "./assets/bg3.jpg";
 import Sidebar from './Sidebar'
 import db from './config';
 import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { getStore } from "./redux/features/fastfood";
+import { getStore,getSliders } from "./redux/features/fastfood";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 
 const Dashboard = () => {
     const dispatch = useDispatch();
     const history = useHistory()
     const { isLogin, isUserType } = useSelector(state => state.user)
+    const { sliders } = useSelector(state => state.fastfood)
     const [store, setStore] = useState([])
     const [slider,setSlider]=useState([])
     const auth = getAuth();
@@ -39,7 +40,18 @@ const Dashboard = () => {
             });
         });
     }
-   
+    const fetchSlider = async () => {
+        const q = query(collection(db, "slider"));
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+           const sliders = [];
+            querySnapshot.forEach((doc) => {
+                setSlider(JSON.stringify(doc.data()));
+                // dispatch(getSliders(doc.data))
+            });
+            
+            console.log('SLIDERS', slider)
+        });
+    }
 
     if (user !== null) {
         // The user object has basic properties such as display name, email, etc.
@@ -60,7 +72,7 @@ const Dashboard = () => {
                 // dispatch(getUser(user))
                 fetchUserProfile();
                 fetchStore();
-                fetchSlider();
+                
                 const displayName = user.displayName;
                 const email = user.email;
                 const photoURL = user.photoURL;
@@ -111,22 +123,12 @@ const Dashboard = () => {
     }
 
     
-    const fetchSlider = async () => {
-        const q = query(collection(db, "slider"));
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-           const sliders = [];
-            querySnapshot.forEach((doc) => {
-                sliders.push(doc.data());
-                
-            });
-            setSlider(sliders)
-            console.log('SLIDERS', slider)
-        });
-    }
+    
 
     if (!isLogin) {
         return <Redirect to={'/sign-in'} />
     }
+    fetchSlider();
     const ReturnDashNoard = () => {
         if (profile.UserType == 'Customer') {
             return (
