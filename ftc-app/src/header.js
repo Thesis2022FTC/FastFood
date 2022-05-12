@@ -9,6 +9,7 @@ import Avatar from 'react-avatar';
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import db from './config'
 import { MdHomeFilled, MdOutlineArrowBackIos ,MdOutlineShoppingCart} from "react-icons/md";
+
 const Header = () => {
     const history = useHistory()
     const { isLogin, users } = useSelector(state => state.user)
@@ -18,6 +19,8 @@ const Header = () => {
     const auth = getAuth();
     const user = auth.currentUser;
     const [qty, setQty] = useState(0)
+
+    
     useEffect(() => {
         if (user) {
             fetchUserProfile();
@@ -96,7 +99,11 @@ const Header = () => {
 
         <Navbar collapseOnSelect expand="lg" /* bg="light" variant="light"  */style={{backgroundColor:'#F39C12'/* backgroundImage: `url(${background})`, resizeMode:'contains' */}} >
             <Container>
-                <Navbar.Brand><MdHomeFilled /><Button variant="light" style={{backgroundColor:'#F39C12'}} onClick={() => history.push('/dashboard')}>Home</Button></Navbar.Brand>
+                <Navbar.Brand><img src="https://firebasestorage.googleapis.com/v0/b/fastfood-queue.appspot.com/o/logo.png?alt=media&token=f11496b7-01cd-477c-ac9c-23f7c5f9aa10" width={50}  alt="Logo" className="d-inline-block align-top"/>
+                
+                </Navbar.Brand>
+                <p><b>The Best Fastfood Ordering App</b></p>
+                
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
@@ -110,3 +117,4 @@ const Header = () => {
 }
 export default Header;
 
+//<MdHomeFilled /><Button variant="light" style={{backgroundColor:'#F39C12'}} onClick={() => history.push('/dashboard')}>Home</Button>
