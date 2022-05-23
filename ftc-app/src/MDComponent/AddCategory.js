@@ -50,8 +50,8 @@ const AddCategory = () => {
     }
 
     return (
-        <div className="container auth-inner auth-wrapper" style={{ marginTop: 30, marginBottom: 30 }}>
-            <Alert variant="dark" className="text-center blockquote">Add/Update Food Category</Alert>
+        <Container  style={{ marginTop: 30, marginBottom: 30 }}>
+            <Alert variant="dark" className="text-center blockquote" style={{ marginTop: 30, marginBottom: 30 }}>Add/Update Food Category</Alert>
             <Form onSubmit={handleSubmit}>
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridCompanyname">
@@ -93,7 +93,7 @@ const AddCategory = () => {
 
                 </tbody>
             </Table>
-        </div>
+        </Container>
     )
 }
 

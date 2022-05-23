@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Table, Button, Image, Modal } from "react-bootstrap";
+import { Alert, Table, Button, Image, Modal,Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import NumericInput from 'react-numeric-input';
@@ -55,7 +55,7 @@ const MyCart = () => {
     }
 
     return (
-        <div className='container auth-inner' style={{ padding: 30, marginTop: 40 }} >
+        <Container  style={{ padding: 30, marginTop: 40 }} >
             <Alert variant="warning" className="text-center blockquote">My Cart</Alert>
             <Table striped bordered hover variant="light" responsive="md">
                 <thead>
@@ -134,7 +134,7 @@ const MyCart = () => {
                 </Modal.Footer>
             </Modal>
 
-        </div>
+        </Container>
 
 
     )

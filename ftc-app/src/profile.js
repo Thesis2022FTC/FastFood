@@ -34,7 +34,7 @@ const Profile = () => {
 
 
     return (
-        <Container className="container auth-inner auth-wrapper" style={{ marginTop: 30, marginBottom: 30 }}>
+        <Container style={{ marginTop: 30, marginBottom: 30, backgroundColor:'#fff'}}>
             <ProfileCard fastfood={store} />
         </Container>
     )

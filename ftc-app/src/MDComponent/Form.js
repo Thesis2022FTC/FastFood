@@ -133,8 +133,8 @@ const FormComponent = () => {
 
     return (
         
-            <div className="container auth-inner auth-wrapper" style={{ marginTop: 30,  marginBottom:30}}>
-                <Alert variant="dark" className="text-center blockquote">Add/Update Company Information</Alert>
+            <Container style={{ marginTop: 30,  marginBottom:30, backgroundColor:'#fff'}}>
+                <Alert variant="dark" className="text-center blockquote" style={{ marginTop: 30,  marginBottom:30}}>Add/Update Company Information</Alert>
                 <Form onSubmit={handleSubmit}>
                     <Row className="mb-3">
                         <Form.Group as={Col} controlId="formGridCompanyname">
@@ -275,7 +275,7 @@ const FormComponent = () => {
                         </Stack>
                     </div>
                 </Form>
-            </div>
+            </Container>
        
     )
 }

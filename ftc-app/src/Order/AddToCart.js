@@ -44,14 +44,14 @@ const AddMenu = () => {
 
 
     return (
-        <div className="container " style={{ marginTop: 30, marginBottom: 30 }}>
+        <Container  style={{ marginTop: 30, marginBottom: 30 }}>
             <Alert variant="light" className="text-center blockquote">ORDER NOW</Alert>
-            <div className='container auth-inner auth-wrapper'>
+            <Container>
                 <MenuCard menu={menu} />
-            </div>
+            </Container>
 
 
-        </div>
+        </Container>
     )
 }
 
