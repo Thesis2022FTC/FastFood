@@ -51,7 +51,7 @@ const MyCart = () => {
         
         const myOrder = {
             orderID: orderID,
-            totalAmount:total,
+            totalAmount:total-promo,
             totalQuantity:qty,
             uid: user.uid,
             displayName: user.displayName,
