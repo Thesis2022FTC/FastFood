@@ -8,11 +8,11 @@ import { getUser, clearUsers, isUserLogin } from './redux/features/userSlice'
 import { doc, setDoc } from "firebase/firestore";
 import db from './config';
 
-const SignUp = () => {
+const SignUpCustomer = () => {
     const dispatch = useDispatch()
     const [currentUser, setCurrentUser] = useState(null);
-    const [passError,setPassEror]=useState(false)
     const [error, setError] = useState()
+    const [passError,setPassEror]=useState(false)
     let image = "https://firebasestorage.googleapis.com/v0/b/fastfood-queue.appspot.com/o/Jolibee%2FJollibee-logo.png?alt=media&token=3c45576b-bd03-4a27-8bb7-50f4e3279ee3"
     const auth = getAuth();
     auth.languageCode = 'it';
@@ -47,7 +47,7 @@ const SignUp = () => {
                 Email: email.value,
                 Password: password.value,
                 PhoneNumber: phone.value,
-                UserType: 'Manager',
+                UserType: 'Customer',
                 uid: user.uid
 
             }
@@ -79,7 +79,7 @@ const SignUp = () => {
         <div className="auth-wrapper" style={{backgroundColor:'#FCF3CF'}}>
             <div className="auth-inner" style={{backgroundColor:'#F9E79F'}}>
                 <form onSubmit={handleSubmit}>
-                    <h3>Manager's Registration Form</h3>
+                    <h3>Customer's Registration Form</h3>
 
                     <div className="form-group">
                         <label>First name</label>
@@ -136,4 +136,4 @@ const SignUp = () => {
             </div></div>
     );
 }
-export default SignUp;
+export default SignUpCustomer;

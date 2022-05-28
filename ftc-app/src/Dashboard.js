@@ -135,7 +135,7 @@ const Dashboard = () => {
                     <div style={{marginTop:24, backgroundColor:'#F39C12'}}> <ControlledCarousel slider={slider} /></div>
                     <div className="container" style={{ padding: 30, }}>
                        
-                        <div style={{backgroundColor:'red'}}  style={{ marginTop: 50, paddingBottom: 50 }}>
+                        <div style={{backgroundColor:'red',marginTop: 50, paddingBottom: 50 }}  >
                             <CardGrid fastfood={store} />
                         </div>
                         

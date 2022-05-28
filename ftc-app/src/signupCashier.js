@@ -8,63 +8,65 @@ import { getUser, clearUsers, isUserLogin } from './redux/features/userSlice'
 import { doc, setDoc } from "firebase/firestore";
 import db from './config';
 
-const SignUp = () => {
+const SignUpCashier = () => {
     const dispatch = useDispatch()
     const [currentUser, setCurrentUser] = useState(null);
-    const [passError,setPassEror]=useState(false)
     const [error, setError] = useState()
+    const [passError,setPassEror]=useState(false)
     let image = "https://firebasestorage.googleapis.com/v0/b/fastfood-queue.appspot.com/o/Jolibee%2FJollibee-logo.png?alt=media&token=3c45576b-bd03-4a27-8bb7-50f4e3279ee3"
     const auth = getAuth();
     auth.languageCode = 'it';
 
     useEffect(() => {
-        dispatch(clearUsers())
-        setPassEror(false)
+       setPassEror(false)
     }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const user = auth.currentUser;
-        const { email, password, fname, lname, phone,cpassword } = e.target.elements;
+        const { email, password, fname, lname, phone ,cpassword} = e.target.elements;
+
         if(password.value===cpassword.value){
             setPassEror(false)
-        try {
-            await createUserWithEmailAndPassword(auth, email.value, password.value);
-
-            await updateProfile(auth.currentUser, {
-                displayName: fname.value + ' ' + lname.value, photoURL: image
-            })
-            const user = auth.currentUser;
-
-            await signInWithEmailAndPassword(auth, email.value, password.value)
-
-            setCurrentUser(true);
-            dispatch(isUserLogin(true))
-            const profile = {
-                Firstname: fname.value,
-                Lastname: lname.value,
-                Displayname: fname.value + ' ' + lname.value,
-                Email: email.value,
-                Password: password.value,
-                PhoneNumber: phone.value,
-                UserType: 'Manager',
-                uid: user.uid
-
+            try {
+                await createUserWithEmailAndPassword(auth, email.value, password.value);
+    
+                await updateProfile(auth.currentUser, {
+                    displayName: fname.value + ' ' + lname.value, photoURL: image
+                })
+                const user = auth.currentUser;
+    
+                await signInWithEmailAndPassword(auth, email.value, password.value)
+    
+                setCurrentUser(true);
+                dispatch(isUserLogin(true))
+                const profile = {
+                    Firstname: fname.value,
+                    Lastname: lname.value,
+                    Displayname: fname.value + ' ' + lname.value,
+                    Email: email.value,
+                    Password: password.value,
+                    PhoneNumber: phone.value,
+                    UserType: 'Cashier',
+                    uid: user.uid
+    
+                }
+                setDoc(doc(db, "userProfile", user.uid), profile);
+                await sendEmailVerification(auth.currentUser)
+                alert("New Cashier was added succesfully. Cashier needs to verify his/her email to proceed.")
+               
+            } catch (error) {
+                setError(error.message)
             }
-            setDoc(doc(db, "userProfile", user.uid), profile);
-            await sendEmailVerification(auth.currentUser)
-
-        } catch (error) {
-            setError(error.message)
+        }else{
+            setPassEror(true)
         }
-    }else{
-        setPassEror(true)
-    }
+        
     };
 
-    if (currentUser) {
-        return <Redirect to={'/email-verification'} />
-    }
+    // if (currentUser) {
+    //     return <Redirect to={'/email-verification'} />
+    // }
 
     const InValidCredential = () => {
         return (
@@ -79,7 +81,7 @@ const SignUp = () => {
         <div className="auth-wrapper" style={{backgroundColor:'#FCF3CF'}}>
             <div className="auth-inner" style={{backgroundColor:'#F9E79F'}}>
                 <form onSubmit={handleSubmit}>
-                    <h3>Manager's Registration Form</h3>
+                    <h3>Cashier's Registration Form</h3>
 
                     <div className="form-group">
                         <label>First name</label>
@@ -127,13 +129,13 @@ const SignUp = () => {
 
                     <InValidCredential />
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary form-control">Sign Up</button>
+                        <button type="submit" className="btn btn-primary form-control">Add Cashier</button>
                     </div>
-                    <p className="forgot-password text-right">
+                    {/* <p className="forgot-password text-right">
                         Already registered <Link to={"/sign-in"}>Sign in</Link>
-                    </p>
+                    </p> */}
                 </form>
             </div></div>
     );
 }
-export default SignUp;
+export default SignUpCashier;

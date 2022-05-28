@@ -16,7 +16,8 @@ import Profile from './profile'
 import { getAuth } from 'firebase/auth'
 import SuccessOrder from './Order/SuccessOrder';
 import ResetPassword from './ForgotPassword';
-
+import CustomerSignup from './signupCustomer'
+import CashierSignup from './signupCashier'
 function App() {
   const auth = getAuth();
   const user = auth.currentUser;
@@ -40,6 +41,8 @@ function App() {
         <Route path="/my-cart" component={MyCart} />
         <Route path="/success-page" component={SuccessOrder} />
         <Route path="/reset-pass" component={ResetPassword} />
+        <Route path="/sign-up-customer" component={CustomerSignup} />
+        {/* <Route path="/sign-up-cashier" component={CashierSignup} /> */}
       </Switch>
 
     </div></Router >

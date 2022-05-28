@@ -4,13 +4,14 @@ import Admin from "./Admin"
 import ProductTabs from "./ProductTabs";
 import Profile from './profile'
 import QrCode from './QrCode'
+import SignUpCashier from "./signupCashier";
 
 const Sidebar = ({ usertype }) => {
   const [key, setKey] = useState(usertype == 'Manager' ? 'profile' : 'qrcode');
 
   return (
 
-    usertype == 'Cashier' ?
+    usertype === 'Cashier' ?
       <Tabs
         id="controlled-tab-example"
         activeKey={key}
@@ -40,6 +41,9 @@ const Sidebar = ({ usertype }) => {
         </Tab>
         <Tab eventKey="admin" title="Add/Edit Profile">
           <Admin />
+        </Tab>
+        <Tab eventKey="cashier" title="Register New Cashier">
+          <SignUpCashier />
         </Tab>
         <Tab eventKey="product" title="Add Product">
           <ProductTabs />

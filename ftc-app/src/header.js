@@ -83,10 +83,11 @@ const Header = () => {
                     <NavDropdown title={<Avatar name={user.displayName} size="30" round={true} />} id="avatar-dropdown" style={{ marginRight: 20 }}>
 
                         <NavDropdown.Item href="#"><Avatar round={true} name={user.displayName} size="20" style={{ marginRight: 5 }} />{user.displayName}</NavDropdown.Item>
-                        <NavDropdown.Item style={{ fontSize: 10 }}>{user.email}</NavDropdown.Item>
+                        <NavDropdown.Item style={{ fontSize: 10,marginLeft:25 }}>{user.email}</NavDropdown.Item>
+                        <NavDropdown.Item style={{ fontSize: 10,marginLeft:25  }}>{profile.UserType}</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        {profile.UserType === 'Manager' ? <NavDropdown.Item onClick={() => history.push('/admin')}>
-                            Admin Panel</NavDropdown.Item> : null}
+                        {/* {profile.UserType === 'Manager' ? <NavDropdown.Item onClick={() => history.push('/admin')}>
+                            Admin Panel</NavDropdown.Item> : null} */}
                         <NavDropdown.Item href={"/sign-in"} onClick={logout}>Sign out</NavDropdown.Item>
                     </NavDropdown>
 
