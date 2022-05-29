@@ -80,11 +80,11 @@ const Header = () => {
                             <span className="visually-hidden">cart</span>
                         </Nav.Link> : null}
 
-                    <NavDropdown title={<Avatar name={user.displayName} size="30" round={true} />} id="avatar-dropdown" style={{ marginRight: 20 }}>
+                    <NavDropdown title={<Avatar name={user.displayName} size="30" round={true} />} id="avatar-dropdown" style={{ marginRight: 60 }}>
 
-                        <NavDropdown.Item href="#"><Avatar round={true} name={user.displayName} size="20" style={{ marginRight: 5 }} />{user.displayName}</NavDropdown.Item>
-                        <NavDropdown.Item style={{ fontSize: 10,marginLeft:25 }}>{user.email}</NavDropdown.Item>
-                        <NavDropdown.Item style={{ fontSize: 10,marginLeft:25  }}>{profile.UserType}</NavDropdown.Item>
+                        <NavDropdown.Item href="#"><Avatar round={true} name={user.displayName} size="15" style={{ marginRight: 5,fontSize:12 }} />{user.displayName}</NavDropdown.Item>
+                        <NavDropdown.Item style={{ fontSize: 10,marginLeft:25, width:140 }}>{user.email}</NavDropdown.Item>
+                        <NavDropdown.Item style={{ fontSize: 10,marginLeft:25, width:140 }}>{profile.UserType}</NavDropdown.Item>
                         <NavDropdown.Divider />
                         {/* {profile.UserType === 'Manager' ? <NavDropdown.Item onClick={() => history.push('/admin')}>
                             Admin Panel</NavDropdown.Item> : null} */}

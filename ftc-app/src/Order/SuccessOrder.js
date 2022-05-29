@@ -28,7 +28,7 @@ const SuccessOrder = () => {
         }
 
          addDoc(collection(db, "rating"), myRate);
-      
+        alert("Rating successfully sent.")
       }
 
     return (
