@@ -35,7 +35,8 @@ const MenuCard = ({ menu }) => {
 
   return (
     <Row xs={4} md={6} className="g-4">
-      {menu.map((item, idx) => (
+      {menu.filter((item)=>isUserType.UserType === 'Manager' ?item.uid===user.uid:item.uid!==user.uid)
+      .map((item, idx) => (
         <Col>
           <Card>
             <Card.Img variant="top" src={item.Logo} style={{ width: 200, height: 200, flex: 1, alignSelf: 'center', padding: 10 }} />
