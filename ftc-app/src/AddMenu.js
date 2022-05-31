@@ -117,7 +117,7 @@ const AddMenu = () => {
                     </Form.Group>
                     <Form.Group as={Col} controlId="formGridZip">
                         <Form.Label>Price</Form.Label>
-                        <Form.Control type="number" placeholder="Price" name="price" value={price} onChange={(e) => setPrice(e.target.value)} />
+                        <Form.Control maxLength="3" type="text" placeholder="Price" name="price" value={price} onChange={(e) => setPrice(e.target.value)} />
                     </Form.Group>
                     <Form.Group className="position-relative mb-3">
                         <Form.Label>Upload Logo</Form.Label>

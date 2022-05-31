@@ -5,7 +5,7 @@ import ProductTabs from "./ProductTabs";
 import Profile from './profile'
 import QrCode from './QrCode'
 import SignUpCashier from "./signupCashier";
-
+import GenerateVouchers from "./Vouchers"
 const Sidebar = ({ usertype }) => {
   const [key, setKey] = useState(usertype == 'Manager' ? 'profile' : 'qrcode');
 
@@ -41,6 +41,9 @@ const Sidebar = ({ usertype }) => {
         </Tab>
         <Tab eventKey="admin" title="Add/Edit Profile">
           <Admin />
+        </Tab>
+        <Tab eventKey="vouchers" title="Generate Vouchers">
+          <GenerateVouchers />
         </Tab>
         <Tab eventKey="cashier" title="Register New Cashier">
           <SignUpCashier />

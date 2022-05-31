@@ -178,16 +178,16 @@ const SignUpCustomer = () => {
                     </div> */}
                     
                     <Form.Group className="position-relative mb-3">
-                        <Form.Label>Upload Senior Card</Form.Label>
+                        <Form.Label>Upload Senior Card <i style={{color:'red'}}>*Optional*</i></Form.Label>
                         <Form.Control
                             type="file"
-                            required
                             name="logo"
                             onChange={changeHandler}
                             accept="image/*"
                         />
                     </Form.Group>
-                    <div className="text-center" style={{ marginBottom: 30 }}>
+                   
+                    <InValidCredential />
                     {
                         visible ?
                             <ProgressBar style={{ marginTop: 10, marginBottom: 10 }} >
@@ -196,8 +196,6 @@ const SignUpCustomer = () => {
                                 <ProgressBar striped variant="danger" now={prog} key={3} animated label={`${Math.floor(prog - 1)}%`} />
                             </ProgressBar> : null
                     }
-                    </div>
-                    <InValidCredential />
                     <div className="form-group">
                         <button type="submit" className="btn btn-primary form-control">Sign Up</button>
                     </div>
@@ -205,7 +203,10 @@ const SignUpCustomer = () => {
                         Already registered <Link to={"/sign-in"}>Sign in</Link>
                     </p>
                 </form>
-            </div></div>
+              
+                   
+                             
+                                </div></div>
     );
 }
 export default SignUpCustomer;
