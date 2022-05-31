@@ -39,7 +39,7 @@ const MenuCard = ({ menu }) => {
       .map((item, idx) => (
         <Col>
           <Card>
-            <Card.Img variant="top" src={item.Logo} style={{ width: 200, height: 200, flex: 1, alignSelf: 'center', padding: 10 }} />
+            <Card.Img variant="top" src={item.Logo} style={{ width: 100, height: 100, alignSelf: 'center', padding: 10 }} />
             <Card.Body>
               <ListGroup className="list-group-flush" color='#23456f'>
                 <ListGroupItem className='small'><strong></strong> {item.MenuName}</ListGroupItem>
