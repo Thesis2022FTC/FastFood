@@ -16,6 +16,7 @@ jobs:
       - run: |
           cd ftc-app
           npm install --legacy-peer-deps
+          export NODE_OPTIONS=--openssl-legacy-provider
           npm run build
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
