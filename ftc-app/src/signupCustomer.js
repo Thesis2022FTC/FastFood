@@ -178,7 +178,7 @@ const SignUpCustomer = () => {
                     </div> */}
                     
                     <Form.Group className="position-relative mb-3">
-                        <Form.Label>Upload Senior Card <i style={{color:'red'}}>*Optional*</i></Form.Label>
+                        <Form.Label>Upload Image <i style={{color:'red'}}>**verification id**</i></Form.Label>
                         <Form.Control
                             type="file"
                             name="logo"

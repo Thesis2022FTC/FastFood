@@ -59,7 +59,23 @@ const FormComponent = () => {
         setSrcFile(event.target.files[0]);
     };
     // console.log("Prof",myProfile[0][0].uid)
+    const handleStartTimeChange = (e) => {
+                const selected = e.target.value;
+                if (selected === endTime) {
+                    alert("Opening and closing time cannot be the same.");
+                    return;
+                }
+                setStarTime(selected);
+                };
 
+    const handleEndTimeChange = (e) => {
+                const selected = e.target.value;
+                if (selected === startTime) {
+                    alert("Opening and closing time cannot be the same.");
+                    return;
+                }
+                setEndTime(selected);
+                };
     const handleSubmit = async (e) => {
         e.preventDefault();
         // const { companyname, fullname, seat, address1, address2, city, zip, drivethru, parkspace, startTime, endTime, description, uploadFile } = e.target.elements;
@@ -83,6 +99,7 @@ const FormComponent = () => {
             uid: user.uid
 
         }
+              
 
 
         const storageRef = ref(storage, user.uid + '/' + srcFile.name/* uploadFile.files[0].name */);
@@ -149,7 +166,7 @@ const FormComponent = () => {
 
                         <Form.Group as={Col} controlId="formGridManager">
                             <Form.Label>Seating Capacity</Form.Label>
-                            <Form.Control type="number" placeholder="Enter seat capacity" name='seat' defaultValue="0" required value={seat} onChange={(e) => setSeat(e.target.value)} />
+                            <Form.Control type="number" placeholder="Enter seat capacity" name='seat' defaultValue="0" required min={0} value={seat} onChange={(e) => setSeat(e.target.value)} />
                         </Form.Group>
                     </Row>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
@@ -189,7 +206,7 @@ const FormComponent = () => {
                         </Form.Group>
                         <Form.Group as={Col} className="mb-3" id="formGridTimeStart">
                             <Form.Label>Store Opening Time</Form.Label>
-                            <Form.Select aria-label="Default select example" name="startTime" required value={startTime} onChange={(e) => setStarTime(e.target.value)}>
+                            <Form.Select aria-label="Default select example" name="startTime" required value={startTime} onChange={handleStartTimeChange} >
                                 <option>Select opening hour</option>
                                 <option value="12:00 am">12:00 am</option>
                                 <option value="1:00 am">1:00 am</option>
@@ -219,7 +236,7 @@ const FormComponent = () => {
                         </Form.Group>
                         <Form.Group as={Col} className="mb-3" id="formGridTimeClose">
                             <Form.Label>Store Closing time</Form.Label>
-                            <Form.Select aria-label="Default select example" name="endTime" required value={endTime} onChange={(e) => setEndTime(e.target.value)}>
+                            <Form.Select aria-label="Default select example" name="endTime" required value={endTime} onChange={handleEndTimeChange}>
                                 <option>Select closing hour</option>
                                 <option value="12:00 am">12:00 am</option>
                                 <option value="1:00 am">1:00 am</option>
