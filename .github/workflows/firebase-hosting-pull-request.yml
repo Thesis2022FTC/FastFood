@@ -13,9 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: 
+      - run: |
           cd ftc-app
-          npm install
+          npm install --legacy-peer-deps
+          export NODE_OPTIONS=--openssl-legacy-provider
           npm run build
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
