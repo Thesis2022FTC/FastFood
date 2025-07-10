@@ -4,7 +4,8 @@ import { clearUsers, getUser, isUserLogin } from './redux/features/userSlice'
 import firebaseConfig from "./config";
 import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { Link, Redirect } from "react-router-dom";
-
+import logo from './assets/logo.png';
+import './login.css'; // ✅ make sure this is the correct path
 
 const auth = getAuth();
 const Login = () => {
@@ -49,42 +50,40 @@ const Login = () => {
         )
     }
 
-    return (
-        <div className="auth-wrapper" style={{backgroundColor:'#FCF3CF'}}>
-            <div className="auth-inner" style={{backgroundColor:'#F9E79F'}}>
-                <form onSubmit={handleLogin}>
+     return (
+        <div className="login-wrapper">
+            <div className="login-card">
+                <div className="logo-wrapper">
+                    <img src={logo} alt="App Logo" className="logo-img" />
+                </div>
+                <form onSubmit={handleLogin} className="login-form">
                     <h3>Sign In</h3>
 
-                    <div className="form-group">
-                        <label>Email address</label>
-                        <input type="email" className="form-control" placeholder="Enter email" name="email" />
-                    </div>
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="Enter email" required />
 
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input type="password" className="form-control" placeholder="Enter password" name="password" />
-                    </div>
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Enter password" required />
+
                     <InValidCredential />
-                    <div className="form-group">
-                        <div className="custom-control custom-checkbox">
-                            <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                            <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-                        </div>
-                    </div>
 
-                    <div className="form-group">
-                        <button style={{ marginTop: 20 }} type="submit" className="btn btn-primary form-control">Sign in</button>
-                    </div>
-                    <p className="forgot-password text-right">
-                        <a href="/reset-pass"> Forgot password?</a>
-                    </p>
-                    <p className="forgot-password text-right">
+                 <div className="form-check mt-3">
+                <input className="form-check-input" type="checkbox" id="remember"  style={{ marginLeft: '39px' }} />
+                <label className="form-check-label" htmlFor="remember" style={{ marginRight: '100px' }}>
+                    Remember me
+                </label>
+                </div>
 
-                        <Link to={"/sign-up"}>Register as a Manager</Link></p>
-                        <p className="forgot-password text-right">
-                        <Link to={"/sign-up-customer"}>Register as a Customer</Link></p>
+                    <button type="submit" className="btn-login">Sign In</button>
+
+                    <div className="links">
+                        <Link to="/reset-pass">Forgot password?</Link>
+                        <Link to="/sign-up">Register as a Manager</Link>
+                        <Link to="/sign-up-customer">Register as a Customer</Link>
+                    </div>
                 </form>
-            </div></div>
+            </div>
+        </div>
     );
-}
+};
 export default Login;

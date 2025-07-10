@@ -19,7 +19,7 @@ import {
   query,
   where,
   onSnapshot,
-  addDoc,
+  addDoc, Timestamp, orderBy
 } from "firebase/firestore";
 import db from "./config";
 import { encode, decode } from "js-base64";
@@ -36,33 +36,83 @@ import { v4 as uuidv4 } from "uuid";
 const Vouchers = () => {
   const [voucher,setVoucher]=useState([])
   const [price,setPrice]=useState(0)
-    useEffect(() => {
-    fetchVouchers();
-    // console.log("Codes:", voucher)
-  }, [voucher]);
+const [vouchersRaw, setVouchersRaw] = useState([]);
+  const [voucherList, setVoucherList] = useState([]);
+  const fetchVouchers = () => {
+  const q = query(
+    collection(db, "vouchers"),
+    orderBy("expiration", "desc")
+  );
 
 
   
-  const fetchVouchers = async () => {
-    // dispatch(clearStore())
+  const unsubscribe = onSnapshot(q, (querySnapshot) => {
+    const vouch = [];
+    const now = new Date();
 
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const expiration = data.expiration?.toDate(); // convert Firestore Timestamp to JS Date
+      const isExpired = expiration && expiration < now;
 
-    const q = query(collection(db, "vouchers"));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const vouch = [];
-      querySnapshot.forEach((doc) => {
-        vouch.push(doc.data());
+      vouch.push({
+        ...data,
+        status: isExpired ? "expired" : "active"
       });
-      setVoucher(vouch)
-      console.log("Vouchers:", vouch);
     });
-  };
+
+    setVoucher(vouch);
+    console.log("Vouchers:", vouch);
+  });
+
+  return unsubscribe;
+};
+
+ useEffect(() => {
+    const q = query(collection(db, 'vouchers'), orderBy('expiration', 'desc'));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const v = [];
+      querySnapshot.forEach((doc) => v.push(doc.data()));
+      setVouchersRaw(v);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const updateVoucherStatuses = () => {
+      const now = new Date();
+      const updated = vouchersRaw.map((item) => {
+        const expirationDate = item.expiration?.toDate?.() || new Date(item.expiration);
+        const isExpired = expirationDate < now;
+        return {
+          ...item,
+          status: isExpired ? 'expired' : 'active',
+        };
+      });
+      setVoucherList(updated);
+    };
+
+    updateVoucherStatuses();
+    const interval = setInterval(updateVoucherStatuses, 60000); // update every 60s
+
+    return () => clearInterval(interval);
+  }, [vouchersRaw]);
+
+
+useEffect(() => {
+  const unsubscribe = fetchVouchers();
+  return () => unsubscribe(); // clean up on unmount
+}, []);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // const { companyname, fullname, seat, address1, address2, city, zip, drivethru, parkspace, startTime, endTime, description, uploadFile } = e.target.elements;
 
     // const base64Image=encode(uploadFile.files[0].name)
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 7); // add 7 days
     const x= voucher_codes.generate({
         length: 10,
         count: 1,
@@ -70,7 +120,9 @@ const Vouchers = () => {
     });
     const vouchers = {
       promoCode:x,
-      price:price
+      price:price,
+      expiration: Timestamp.fromDate(expirationDate), // Firestore-friendly format
+      status:"active"
     };
     setDoc(doc(db, "vouchers", vouchers.promoCode[0]), vouchers);
     alert("Vouchers generated successfully " + x)
@@ -85,7 +137,8 @@ const Vouchers = () => {
                         <th>#</th>
                         <th>Voucher Code</th>
                         <th>Voucher Price</th>
-                       
+                        <th>Expiration</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -95,8 +148,14 @@ const Vouchers = () => {
                                 <td>{index + 1}</td>
                                 <td>{item.promoCode[0]}</td>
                                 <td>{new Intl.NumberFormat('tl-PH', { style: 'currency', currency: 'Php' }).format(item.price)}</td>
-                               
-                               
+                                <td>
+                                    {item.expiration?.toDate?.().toLocaleDateString('en-PH', {
+                                      year: 'numeric',
+                                      month: 'short',
+                                      day: 'numeric',
+                                    })}
+                                  </td>
+                               <td>{item.status}</td>
                             </tr>
                         )
                     }

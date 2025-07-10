@@ -1,0 +1,112 @@
+/* Login.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-wrapper {
+  background-color: #fef9e7;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background-color: #f9e79f;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-img {
+  width: 80px;      /* adjust to 40–80px as needed */
+  height: auto;
+  object-fit: contain;
+}
+.login-form h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.login-form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+  color: #444;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between checkbox and label */
+  margin-top: 15px;
+}
+
+.remember-me input {
+  margin-right: 8px;
+}
+
+.btn-login {
+  width: 100%;
+  margin-top: 20px;
+  background-color: #f4d03f;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: #f1c40f;
+}
+
+.links {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.links a {
+  display: block;
+  margin-top: 5px;
+  color: #2980b9;
+  text-decoration: none;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 10px;
+}

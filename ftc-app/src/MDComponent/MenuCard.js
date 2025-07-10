@@ -1,18 +1,34 @@
 import React, { useState } from 'react';
-import { Card, Row, Col, ListGroup, ListGroupItem, Button } from "react-bootstrap";
+import { Card, Row, Col, ListGroup, ListGroupItem, Button,Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart } from '../redux/features/cartSlice';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, query, where, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import { collection, query, where, onSnapshot, deleteDoc, doc,addDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from 'uuid';
 import db from '../config';
-
+import moment from 'moment';
+import QRCode from "react-qr-code";
+import { Link, Redirect,useHistory } from "react-router-dom";
 const MenuCard = ({ menu }) => {
   const { isLogin, isUserType } = useSelector(state => state.user)
   const dispatch = useDispatch()
   const auth = getAuth();
   const user = auth.currentUser;
   const [disable, setDisable] = useState(false)
+  const history=useHistory()
+const [showBuyNowQR, setShowBuyNowQR] = useState(false);
+const [buyNowItem, setBuyNowItem] = useState(null);
+const [buyNowOrderId, setBuyNowOrderId] = useState('');
+
+
+const handleBuyNowClick = (item) => {
+  const newOrderId = uuidv4();
+  setBuyNowOrderId(newOrderId);
+  setBuyNowItem(item);
+  setShowBuyNowQR(true);
+};
+
+
 
   const deleteMenu = async (item) => {
     await deleteDoc(doc(db, "menu", item))
@@ -33,34 +49,183 @@ const MenuCard = ({ menu }) => {
 
   }
 
-  return (
-    <Row xs={4} md={6} className="g-4">
-      {menu.filter((item)=>isUserType.UserType === 'Manager' ?item.uid===user.uid:item.uid!==user.uid)
-      .map((item, idx) => (
-        <Col>
-          <Card>
-            <Card.Img variant="top" src={item.Logo} style={{ width: 100, height: 100, alignSelf: 'center', padding: 10 }} />
-            <Card.Body>
-              <ListGroup className="list-group-flush" color='#23456f'>
-                <ListGroupItem className='small'><strong></strong> {item.MenuName}</ListGroupItem>
-                <ListGroupItem className='small'><strong>Starts at:</strong>  &#8369;{item.Price}</ListGroupItem>
-              </ListGroup>
-            </Card.Body>
-            {isUserType.UserType == 'Customer' ?
-              <Card.Body>
 
-                <Button variant='warning' onClick={() => addMenuToCart(item)} className="btn btn-warning">Add to Cart</Button>
-              </Card.Body> :
-              <Card.Body>
-                {/* <Card.Link href="#" className="btn btn-warning" >Edit</Card.Link> */}
-                <Card.Link className="btn btn-danger" onClick={() => { deleteMenu(item.menuID) }}> Delete</Card.Link>
+  const handleBuyNowSubmit = async () => {
+  const order = {
+    orderID: buyNowOrderId,
+    totalAmount: buyNowItem.Price,
+    totalQuantity: 1,
+    uid: user.uid,
+    displayName: user.displayName,
+    date: moment().format('LLLL'),
+    cart: [{
+      cartID: buyNowItem.menuID,
+      menuName: buyNowItem.MenuName,
+      Price: buyNowItem.Price,
+      Quantity: 1,
+      uid: user.uid,
+      Photo: buyNowItem.Logo
+    }]
+  };
+
+  await addDoc(collection(db, "order"), order);
+  setShowBuyNowQR(false);
+  history.push('/success-page');
+};
+
+
+ 
+
+  return (
+    <>
+   <Row xs={1} sm={2} md={3} lg={4} className="g-4 p-3">
+      {menu
+        .filter((item) => isUserType.UserType === 'Manager' ? item.uid === user.uid : item.uid !== user.uid)
+        .map((item, idx) => (
+          <Col key={idx}>
+           <Card style={{
+                border: 'none',
+                borderRadius: '16px',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
+                backgroundColor: '#fefefe',
+                height: '100%', // Ensures full height in column
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
+              }}>
+              <div style={{ textAlign: 'center', padding: '20px' }}>
+                <Card.Img
+                  variant="top"
+                  src={item.Logo}
+                  style={{
+                    width: '100px',
+                    height: '100px',
+                    objectFit: 'contain',
+                    borderRadius: '12px'
+                  }}
+                />
+              </div>
+
+              <Card.Body className="text-center pt-0">
+                                <h6
+                  style={{
+                    fontWeight: 'bold',
+                    marginBottom: 10,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}
+                  title={item.MenuName}
+                >
+                  {item.MenuName}
+                </h6>
+                <p style={{ marginBottom: 0, fontSize: 14 }}>
+                  <strong>Starts at:</strong> ₱{item.Price}
+                </p>
               </Card.Body>
-            }
-          </Card>
-        </Col>
-      ))}
+
+            <Card.Body className="text-center pt-0 pb-3">
+  {isUserType.UserType === 'Customer' ? (
+              <>
+                <Button
+                  onClick={() => addMenuToCart(item)}
+                  style={{
+                    background: 'linear-gradient(to right, #f4d03f, #f5b041)',
+                    border: 'none',
+                    color: '#2c3e50',
+                    fontWeight: 'bold',
+                    padding: '6px 16px',
+                    fontSize: '14px',
+                    borderRadius: '25px',
+                    width: '70%',
+                    transition: 'all 0.3s ease',
+                    marginBottom: '8px'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'linear-gradient(to right, #f1c40f, #f39c12)';
+                    e.target.style.color = '#fff';
+                    e.target.style.transform = 'scale(1.03)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'linear-gradient(to right, #f4d03f, #f5b041)';
+                    e.target.style.color = '#2c3e50';
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                >
+                  🛒 Add to Cart
+                </Button>
+
+                <Button
+                  onClick={() => handleBuyNowClick(item)} // Replace with your logic
+                  style={{
+                    background: 'linear-gradient(to right, #2ecc71, #27ae60)',
+                    border: 'none',
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    padding: '6px 16px',
+                    fontSize: '14px',
+                    borderRadius: '25px',
+                    width: '70%',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = 'linear-gradient(to right, #27ae60, #1abc9c)';
+                    e.target.style.transform = 'scale(1.03)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = 'linear-gradient(to right, #2ecc71, #27ae60)';
+                    e.target.style.transform = 'scale(1)';
+                  }}
+                >
+                  🛍 Buy Now
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="danger"
+                onClick={() => deleteMenu(item.menuID)}
+                style={{
+                  padding: '6px 16px',
+                  fontSize: '14px',
+                  borderRadius: '25px',
+                  fontWeight: 'bold'
+                }}
+              >
+                🗑 Delete
+              </Button>
+            )}
+          </Card.Body>
+
+
+            </Card>
+          </Col>
+        ))}
     </Row>
-  )
-}
+<Modal show={showBuyNowQR} onHide={() => setShowBuyNowQR(false)}>
+  <Modal.Header closeButton>
+    <Modal.Title>Buy Now: Scan & Confirm</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    {buyNowItem && (
+      <div style={{ textAlign: 'center' }}>
+        <p><strong>{buyNowItem.MenuName}</strong></p>
+        <p>Price: ₱{buyNowItem.Price}</p>
+        <QRCode value={buyNowOrderId} />
+      </div>
+    )}
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowBuyNowQR(false)}>
+      Cancel
+    </Button>
+    <Button variant="primary" onClick={handleBuyNowSubmit}>
+      Submit Order
+    </Button>
+  </Modal.Footer>
+</Modal>
+
+    </>
+  );
+};
 
 export default MenuCard;

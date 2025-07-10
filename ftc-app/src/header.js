@@ -76,25 +76,79 @@ const Header = () => {
                     {profile.UserType === 'Customer' ?
 
                         <Nav.Link eventKey={2} onClick={() => history.push('/my-cart')}>
-                           <MdOutlineShoppingCart color="tomato"/>  <Badge bg="warning">{qty}</Badge>
+                           <MdOutlineShoppingCart color="white"/>  <Badge bg="black">{qty}</Badge>
                             <span className="visually-hidden">cart</span>
                         </Nav.Link> : null}
 
-                    <NavDropdown title={<Avatar name={user.displayName} size="30" round={true} />} id="avatar-dropdown" style={{ marginRight: 60 }}>
+                    <NavDropdown
+                    title={<Avatar name={user.displayName} size="30" round={true} />}
+                    id="avatar-dropdown"
+                    style={{ marginRight: 60 }}
+                  >
+                    {/* Display Name */}
+                    <NavDropdown.Item
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        fontSize: 12,
+                        width: 200,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
+                      <Avatar
+                        round={true}
+                        name={user.displayName}
+                        size="20"
+                        style={{ marginRight: 8 }}
+                      />
+                      {user.displayName}
+                    </NavDropdown.Item>
 
-                        <NavDropdown.Item href="#"><Avatar round={true} name={user.displayName} size="15" style={{ marginRight: 5,fontSize:12 }} />{user.displayName}</NavDropdown.Item>
-                        <NavDropdown.Item style={{ fontSize: 10,marginLeft:25, width:140 }}>{user.email}</NavDropdown.Item>
-                        <NavDropdown.Item style={{ fontSize: 10,marginLeft:25, width:140 }}>{profile.UserType}</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        {/* {profile.UserType === 'Manager' ? <NavDropdown.Item onClick={() => history.push('/admin')}>
-                            Admin Panel</NavDropdown.Item> : null} */}
-                        <NavDropdown.Item href={"/sign-in"} onClick={logout}>Sign out</NavDropdown.Item>
-                    </NavDropdown>
+                    {/* Email */}
+                    <NavDropdown.Item
+                      style={{
+                        fontSize: 10,
+                        paddingLeft: 16,
+                        paddingRight: 16,
+                        width: 200,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                      title={user.email} // Shows full email on hover
+                    >
+                      {user.email}
+                    </NavDropdown.Item>
 
-                </Nav>
-            )
-        }
-    }
+                    {/* User Type */}
+                    <NavDropdown.Item
+                      style={{
+                        fontSize: 10,
+                        paddingLeft: 16,
+                        paddingRight: 16,
+                        width: 200,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
+                      {profile.UserType}
+                    </NavDropdown.Item>
+
+                    <NavDropdown.Divider />
+
+                    <NavDropdown.Item href="/sign-in" onClick={logout}>
+                      Sign out
+                    </NavDropdown.Item>
+                  </NavDropdown>
+
+
+                                  </Nav>
+                              )
+                          }
+                      }
 
     return (
 
