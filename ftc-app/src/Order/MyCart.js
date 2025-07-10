@@ -51,7 +51,7 @@ const MyCart = () => {
         
         const myOrder = {
             orderID: orderID,
-            totalAmount:newTotal,
+            totalAmount:total,
             totalQuantity:qty,
             uid: user.uid,
             displayName: user.displayName,
@@ -69,7 +69,7 @@ const MyCart = () => {
             setPromo(80)
             total=total-80
             setNewTotal(total)
-        
+           
         }
         console.log(event.target.value, newTotal);
         
