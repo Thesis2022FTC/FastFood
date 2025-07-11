@@ -93,9 +93,9 @@ const QrCodeReader = () => {
                 background: "#ffffff"
               }}
             >
-              <Card.Body className="p-4">
+              <Card.Body className="p-4 text-start">
                 <Card.Title className="text-success fw-bold mb-3">🧾 Order Summary</Card.Title>
-                <p><Badge bg="dark">Order ID</Badge> <span className="ms-2">{data}</span></p>
+                <p><Badge bg="secondary">Order ID</Badge> <span className="ms-2">{data}</span></p>
                 <p><Badge bg="secondary">Date</Badge> <span className="ms-2">{cart[0].date}</span></p>
                 <p><Badge bg="secondary">Customer</Badge> <span className="ms-2">{cart[0].displayName}</span></p>
 
@@ -110,8 +110,8 @@ const QrCodeReader = () => {
 
                 <hr />
 
-                <p><Badge bg="info">Quantity</Badge> <span className="ms-2">{cart[0].totalQuantity}</span></p>
-                <p><Badge bg="info">Total</Badge> <span className="ms-2">
+                <p><Badge bg="secondary">Quantity</Badge> <span className="ms-2">{cart[0].totalQuantity}</span></p>
+                <p><Badge bg="secondary">Total</Badge> <span className="ms-2">
                   {new Intl.NumberFormat('tl-PH', {
                     style: 'currency',
                     currency: 'PHP'
