@@ -47,7 +47,7 @@ const [selectedCategory, setSelectedCategory] = useState("");
 
     const fetchMenu = async () => {
         // dispatch(clearStore())
-        const q = query(collection(db, "menu"));
+        const q = query(collection(db, "menu"), where("uid", "==", user.uid));
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
             const menus = [];
             querySnapshot.forEach((doc) => {
