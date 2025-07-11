@@ -14,16 +14,36 @@ const AddMenu = () => {
     const user = auth.currentUser;
     const [menu, setmenu] = useState([])
     const [menuName, setMenuName] = useState()
+     const [category, setCategory] = useState()
     const [logo, setLogo] = useState()
     const [price, setPrice] = useState()
     const [srcFile, setSrcFile] = useState()
     const [visible, setVisible] = useState(false)
     const storage = getStorage();
     const [prog, setProg] = useState(0)
+    const [categories, setCategories] = useState([]);
+const [selectedCategory, setSelectedCategory] = useState("");
+
     useEffect(() => {
         fetchMenu();
 
     }, []);
+
+    useEffect(() => {
+  if (!user) return;
+
+  const docRef = doc(db, "category", user.uid);
+  const unsubscribe = onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      if (Array.isArray(data.menu)) {
+        setCategories(data.menu);
+      }
+    }
+  });
+
+  return () => unsubscribe();
+}, [user]);
 
     const fetchMenu = async () => {
         // dispatch(clearStore())
@@ -51,6 +71,7 @@ const AddMenu = () => {
             menuID:uuidv4(),
             MenuName: menuName,
             Price: price,
+            Category:category,
             uid: user.uid
         }
 
@@ -88,6 +109,7 @@ const AddMenu = () => {
                     console.log('File available at', downloadURL);
                     productcategory['Logo'] = downloadURL
                     setTimeout(() => {
+                        productcategory['Category'] = selectedCategory;
                         setDoc(doc(db, "menu",productcategory.menuID), productcategory);
                         alert('Record has been saved!')
                         setVisible(false)
@@ -119,6 +141,23 @@ const AddMenu = () => {
                         <Form.Label>Price</Form.Label>
                         <Form.Control maxLength="3" type="text" placeholder="Price" name="price" value={price} onChange={(e) => setPrice(e.target.value)} />
                     </Form.Group>
+                   <Form.Group as={Col} controlId="formGridCategory">
+                        <Form.Label>Category</Form.Label>
+                       <Form.Select
+                            name="category"
+                            required
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            >
+                            <option value="">-- Select Category --</option>
+                            {categories.map((cat, idx) => (
+                            <option key={idx} value={cat}>
+                                {cat}
+                            </option>
+                            ))}
+                        </Form.Select>
+                        </Form.Group>
+
                     <Form.Group className="position-relative mb-3">
                         <Form.Label>Upload Logo</Form.Label>
                         <Form.Control

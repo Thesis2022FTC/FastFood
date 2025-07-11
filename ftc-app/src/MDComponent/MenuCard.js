@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Card, Row, Col, ListGroup, ListGroupItem, Button,Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addCart } from '../redux/features/cartSlice';
@@ -19,6 +19,24 @@ const MenuCard = ({ menu }) => {
 const [showBuyNowQR, setShowBuyNowQR] = useState(false);
 const [buyNowItem, setBuyNowItem] = useState(null);
 const [buyNowOrderId, setBuyNowOrderId] = useState('');
+const [categories, setCategories] = useState([]);
+const [activeCategory, setActiveCategory] = useState("All");
+
+useEffect(() => {
+  if (!menu || menu.length === 0) return;
+
+  const vendorUid = menu[0].uid; // get the UID from menu data
+
+  const docRef = doc(db, "category", vendorUid);
+  const unsubscribe = onSnapshot(docRef, (docSnap) => {
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      setCategories(["All", ...(data.menu || [])]);
+    }
+  });
+
+  return () => unsubscribe();
+}, [menu]);
 
 
 const handleBuyNowClick = (item) => {
@@ -78,9 +96,42 @@ const handleBuyNowClick = (item) => {
 
   return (
     <>
+                <div style={{
+              display: "flex",
+              overflowX: "auto",
+              padding: "10px",
+              marginBottom: "20px",
+              gap: "10px"
+            }}>
+              {categories.map((cat, index) => (
+                <Button
+                  key={index}
+                  onClick={() => setActiveCategory(cat)}
+                  variant={activeCategory === cat ? "warning" : "outline-secondary"}
+                  style={{
+                    whiteSpace: "nowrap",
+                    borderRadius: "25px",
+                    padding: "5px 16px",
+                    fontWeight: "bold"
+                  }}
+                >
+                  {cat}
+                </Button>
+              ))}
+            </div>
+
    <Row xs={1} sm={2} md={3} lg={4} className="g-4 p-3">
-      {menu
-        .filter((item) => isUserType.UserType === 'Manager' ? item.uid === user.uid : item.uid !== user.uid)
+     {menu
+        .filter((item) => {
+          // Category filter
+          if (activeCategory !== "All" && item.Category !== activeCategory) return false;
+
+          // Filter by who can see it
+          if (isUserType.UserType === 'Manager' && item.uid !== auth.currentUser?.uid) return false;
+          if (isUserType.UserType !== 'Manager' && item.uid === auth.currentUser?.uid) return false;
+
+          return true;
+        })
         .map((item, idx) => (
           <Col key={idx}>
            <Card style={{

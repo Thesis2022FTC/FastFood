@@ -122,6 +122,7 @@ const Header = () => {
                       {user.email}
                     </NavDropdown.Item>
 
+               
                     {/* User Type */}
                     <NavDropdown.Item
                       style={{
@@ -136,6 +137,22 @@ const Header = () => {
                     >
                       {profile.UserType}
                     </NavDropdown.Item>
+                    {profile.UserType === "Customer" && (
+                      <NavDropdown.Item
+                        style={{
+                          fontSize: 10,
+                          paddingLeft: 16,
+                          paddingRight: 16,
+                          width: 200,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis'
+                        }}
+                        href="/order-history" // optional: link to your order history route
+                      >
+                        Order History
+                      </NavDropdown.Item>
+                    )}
 
                     <NavDropdown.Divider />
 

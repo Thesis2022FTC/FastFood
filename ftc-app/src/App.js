@@ -20,6 +20,7 @@ import { getAuth } from 'firebase/auth'
 import SuccessOrder from './Order/SuccessOrder';
 import ResetPassword from './ForgotPassword';
 import CustomerSignup from './signupCustomer'
+import MyOrderHistory from './Order/OrderHistory';
 //import CashierSignup from './signupCashier'
 function App() {
   const dispatch = useDispatch();
@@ -63,6 +64,7 @@ function App() {
           <Route path="/success-page" component={SuccessOrder} />
           <Route path="/reset-pass" component={ResetPassword} />
           <Route path="/sign-up-customer" component={CustomerSignup} />
+          <Route path="/order-history" component={MyOrderHistory} />
         </Switch>
       </div>
     </Router>
