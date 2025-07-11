@@ -57,20 +57,24 @@ useEffect(() => {
 const handleConfirmAddToCart = () => {
   if (!mainMenuItem) return;
 
+  const isMainDrink = mainMenuItem.Category === 'Drinks';
+  const finalMainPrice = isMainDrink ? getPriceWithSize(mainMenuItem.Price, selectedSize) : mainMenuItem.Price;
+
+  // Add main item (with size pricing if it's a drink)
   dispatch(addCart({
-    cartID: mainMenuItem.menuID,
-    menuName: mainMenuItem.MenuName,
-    Price: mainMenuItem.Price,
+    cartID: isMainDrink ? `${mainMenuItem.menuID}-${selectedSize.toLowerCase()}` : mainMenuItem.menuID,
+    menuName: isMainDrink ? `${mainMenuItem.MenuName} (${selectedSize})` : mainMenuItem.MenuName,
+    Price: finalMainPrice,
     Quantity: 1,
     uid: user.uid,
     Photo: mainMenuItem.Logo
   }));
 
-   if (selectedDrinkForCart) {
+  // Add drink if user selected a separate one (only for meals)
+  if (!isMainDrink && selectedDrinkForCart) {
     const finalDrinkPrice = getPriceWithSize(selectedDrinkForCart.Price, selectedSize);
-
     dispatch(addCart({
-      cartID: selectedDrinkForCart.menuID + '-' + selectedSize.toLowerCase(), // unique ID with size
+      cartID: selectedDrinkForCart.menuID + '-' + selectedSize.toLowerCase(),
       menuName: `${selectedDrinkForCart.MenuName} (${selectedSize})`,
       Price: finalDrinkPrice,
       Quantity: 1,
@@ -79,15 +83,27 @@ const handleConfirmAddToCart = () => {
     }));
   }
 
+  // Reset modal
   setShowAddToCartModal(false);
   setSelectedDrinkForCart(null);
+  setSelectedSize('Small');
 };
 
 
-const handleAddToCartClick = (item) => {
-  setMainMenuItem(item);
-  const vendorUid = item.uid;
 
+const handleAddToCartClick = (item) => {
+  const isDrink = item.Category === "Drinks";
+  setMainMenuItem(item);
+
+  if (isDrink) {
+    // Show modal just for selecting size (no drinks list)
+    setDrinkOptions([]); // empty drinks list
+    setShowAddToCartModal(true);
+    return;
+  }
+
+  // Else: Show modal with drink options
+  const vendorUid = item.uid;
   const drinkQuery = query(
     collection(db, "menu"),
     where("uid", "==", vendorUid),
@@ -100,6 +116,7 @@ const handleAddToCartClick = (item) => {
     setShowAddToCartModal(true);
   });
 };
+
 
 const handleBuyNowClick = (item) => {
   const newOrderId = uuidv4();
@@ -134,7 +151,7 @@ const handleBuyNowClick = (item) => {
   const order = {
     orderID: buyNowOrderId,
     totalAmount: buyNowItem.Price,
-    totalQuantity: 1,
+    totalQuantity: 1, 
     uid: user.uid,
     displayName: user.displayName,
     date: moment().format('LLLL'),
@@ -342,9 +359,13 @@ const handleBuyNowClick = (item) => {
   </Modal.Header>
  <Modal.Body>
   {drinkOptions.length === 0 ? (
-    <p>No drinks available.</p>
+    <>
+      <p>No drink pairing required.</p>
+      <p>Select size for <strong>{mainMenuItem?.MenuName}</strong>:</p>
+    </>
   ) : (
     <>
+      <p>Select a drink to pair with <strong>{mainMenuItem?.MenuName}</strong>:</p>
       <ListGroup>
         {drinkOptions.map((drink) => (
           <ListGroup.Item
@@ -357,33 +378,31 @@ const handleBuyNowClick = (item) => {
             <img src={drink.Logo} alt={drink.MenuName} style={{ width: 40, height: 40, marginRight: 10 }} />
             <div>
               <div>{drink.MenuName}</div>
-              <small>
-                Base Price: ₱{drink.Price}
-              </small>
+              <small>Base Price: ₱{drink.Price}</small>
             </div>
           </ListGroup.Item>
         ))}
       </ListGroup>
-
-      {selectedDrinkForCart && (
-        <div style={{ marginTop: 15 }}>
-          <strong>Select Size:</strong>
-          <div style={{ display: 'flex', gap: '10px', marginTop: 10 }}>
-            {['Small', 'Medium', 'Large'].map(size => (
-              <Button
-                key={size}
-                variant={selectedSize === size ? "warning" : "outline-secondary"}
-                onClick={() => setSelectedSize(size)}
-              >
-                {size} (+₱{size === 'Small' ? 0 : size === 'Medium' ? 10 : 20})
-              </Button>
-            ))}
-          </div>
-        </div>
-      )}
     </>
   )}
+
+  {/* Size selector always visible */}
+  <div style={{ marginTop: 15 }}>
+    <strong>Select Size:</strong>
+    <div style={{ display: 'flex', gap: '10px', marginTop: 10 }}>
+      {['Small', 'Medium', 'Large'].map(size => (
+        <Button
+          key={size}
+          variant={selectedSize === size ? "warning" : "outline-secondary"}
+          onClick={() => setSelectedSize(size)}
+        >
+          {size} (+₱{size === 'Small' ? 0 : size === 'Medium' ? 10 : 20})
+        </Button>
+      ))}
+    </div>
+  </div>
 </Modal.Body>
+
 
   <Modal.Footer>
     <Button variant="secondary" onClick={() => setShowAddToCartModal(false)}>Cancel</Button>
