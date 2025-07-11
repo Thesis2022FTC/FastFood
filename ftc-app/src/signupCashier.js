@@ -1,141 +1,129 @@
 import React, { useEffect, useState } from "react";
-import { Link, Redirect } from "react-router-dom";
-import firebaseConfig from "./config";
-import { getAuth, RecaptchaVerifier, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
-import Dashboard from "./Dashboard";
-import { useDispatch } from 'react-redux'
-import { getUser, clearUsers, isUserLogin } from './redux/features/userSlice'
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { useDispatch } from 'react-redux';
 import db from './config';
+import { isUserLogin } from './redux/features/userSlice';
 
 const SignUpCashier = () => {
-    const dispatch = useDispatch()
-    const [currentUser, setCurrentUser] = useState(null);
-    const [error, setError] = useState()
-    const [passError,setPassEror]=useState(false)
-    let image = "https://firebasestorage.googleapis.com/v0/b/fastfood-queue.appspot.com/o/Jolibee%2FJollibee-logo.png?alt=media&token=3c45576b-bd03-4a27-8bb7-50f4e3279ee3"
-    const auth = getAuth();
-    auth.languageCode = 'it';
+  const dispatch = useDispatch();
+  const [error, setError] = useState("");
+  const [passError, setPassError] = useState(false);
 
-    useEffect(() => {
-       setPassEror(false)
-    }, [])
+  const auth = getAuth();
+  auth.languageCode = 'it';
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const user = auth.currentUser;
-        const { email, password, fname, lname, phone ,cpassword} = e.target.elements;
+  const image = "https://firebasestorage.googleapis.com/v0/b/fastfood-queue.appspot.com/o/Jolibee%2FJollibee-logo.png?alt=media&token=3c45576b-bd03-4a27-8bb7-50f4e3279ee3";
 
-        if(password.value===cpassword.value){
-            setPassEror(false)
-            try {
-                await createUserWithEmailAndPassword(auth, email.value, password.value);
-    
-                await updateProfile(auth.currentUser, {
-                    displayName: fname.value + ' ' + lname.value, photoURL: image
-                })
-                const user = auth.currentUser;
-    
-                await signInWithEmailAndPassword(auth, email.value, password.value)
-    
-                setCurrentUser(true);
-                dispatch(isUserLogin(true))
-                const profile = {
-                    Firstname: fname.value,
-                    Lastname: lname.value,
-                    Displayname: fname.value + ' ' + lname.value,
-                    Email: email.value,
-                    Password: password.value,
-                    PhoneNumber: phone.value,
-                    UserType: 'Cashier',
-                    uid: user.uid
-    
-                }
-                setDoc(doc(db, "userProfile", user.uid), profile);
-                await sendEmailVerification(auth.currentUser)
-                alert("New Cashier was added succesfully. Cashier needs to verify his/her email to proceed.")
-               
-            } catch (error) {
-                setError(error.message)
-            }
-        }else{
-            setPassEror(true)
-        }
-        
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password, fname, lname, phone, cpassword } = e.target.elements;
 
-    // if (currentUser) {
-    //     return <Redirect to={'/email-verification'} />
-    // }
-
-    const InValidCredential = () => {
-        return (
-            <div>
-                <p style={{ fontSize: 10, marginTop: 10 }} className="text-danger">{error}</p>
-            </div>
-        )
+    if (password.value !== cpassword.value) {
+      setPassError(true);
+      return;
     }
 
+    try {
+      setPassError(false);
+      const userCred = await createUserWithEmailAndPassword(auth, email.value, password.value);
+      const user = userCred.user;
 
-    return (
-        <div className="auth-wrapper" style={{backgroundColor:'#FCF3CF'}}>
-            <div className="auth-inner" style={{backgroundColor:'#F9E79F'}}>
-                <form onSubmit={handleSubmit}>
-                    <h3>Cashier's Registration Form</h3>
+      await updateProfile(user, {
+        displayName: `${fname.value} ${lname.value}`,
+        photoURL: image,
+      });
 
-                    <div className="form-group">
-                        <label>First name</label>
-                        <input type="text" className="form-control" placeholder="First name" name='fname' required />
-                    </div>
+      await signInWithEmailAndPassword(auth, email.value, password.value);
+      dispatch(isUserLogin(true));
 
-                    <div className="form-group">
-                        <label>Last name</label>
-                        <input type="text" className="form-control" placeholder="Last name" name='lname' required />
-                    </div>
+      const profile = {
+        Firstname: fname.value,
+        Lastname: lname.value,
+        Displayname: `${fname.value} ${lname.value}`,
+        Email: email.value,
+        Password: password.value,
+        PhoneNumber: phone.value,
+        UserType: 'Cashier',
+        uid: user.uid,
+      };
 
-                    <div className="form-group">
-                        <label>Email address</label>
-                        <input type="email" className="form-control" placeholder="Enter email" name="email" required />
-                    </div>
+      await setDoc(doc(db, "userProfile", user.uid), profile);
+      await sendEmailVerification(user);
 
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input type="password" className="form-control" placeholder="Enter password" name="password" required />
-                        <label hidden={!passError} style={{fontSize:10,color:'red'}}>{passError?"* Password doesn't matched!":""}</label>
-                    </div>
-                    <div className="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" className="form-control" placeholder="Enter password" name="cpassword" required />
-                    </div>
+      alert("✅ Cashier added successfully! Email verification required.");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
-                    <div className="form-group">
-                        <label>Phone Number</label>
-                        <input type="text" className="form-control" placeholder="Enter Phone Number" required name='phone' maxlength="11"/>
-                    </div>
-                    {/* <label>What type of use are you?</label> */}
-                    {/* <div className="form-group">
-                        <label for="manager" style={{ marginTop: 5, marginRight: 10 }}>
-                            <input type="radio" value="Manager" required id="manager" name="userType" style={{ marginRight: 3, marginBottom: 3 }} />
-                            Manager</label>
-                        <label for="manager" style={{ marginTop: 5, marginRight: 10 }}>
-                            <input type="radio" value="Cashier" required id="cashier" name="userType" style={{ marginRight: 3, marginBottom: 3 }} />
-                            Cashier</label>
+  return (
+    <div
+      className="d-flex align-items-center justify-content-center"
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(to right, #fceabb, #f8b500)",
+        padding: "30px"
+      }}
+    >
+      <div
+        className="card shadow-lg p-4"
+        style={{
+          maxWidth: "500px",
+          width: "100%",
+          borderRadius: "20px",
+          backgroundColor: "#fff",
+        }}
+      >
+        <h3 className="text-center mb-4 text-dark">👩‍💼 Cashier Registration</h3>
 
-                        <label for="customer" style={{ marginTop: 5, marginRight: 10 }}>
-                            <input type="radio" value="Customer" required id="customer" name="userType" style={{ marginRight: 3, marginBottom: 3 }} />
-                            Customer</label>
-                    </div> */}
+        <form onSubmit={handleSubmit}>
+          <div className="form-group mb-3">
+           
+            <input type="text" className="form-control" name="fname" placeholder="First Name" required />
+          </div>
 
+          <div className="form-group mb-3">
+           
+            <input type="text" className="form-control" name="lname" placeholder="Last Name" required />
+          </div>
 
-                    <InValidCredential />
-                    <div className="form-group">
-                        <button type="submit" className="btn btn-primary form-control">Add Cashier</button>
-                    </div>
-                    {/* <p className="forgot-password text-right">
-                        Already registered <Link to={"/sign-in"}>Sign in</Link>
-                    </p> */}
-                </form>
-            </div></div>
-    );
-}
+          <div className="form-group mb-3">
+           
+            <input type="email" className="form-control" name="email" placeholder="Enter Email" required />
+          </div>
+
+          <div className="form-group mb-3">
+           
+            <input type="password" className="form-control" name="password" placeholder="Enter Password" required />
+            {passError && (
+              <small className="text-danger">* Passwords do not match</small>
+            )}
+          </div>
+
+          <div className="form-group mb-3">
+           
+            <input type="password" className="form-control" name="cpassword" placeholder="Confirm Password" required />
+          </div>
+
+          <div className="form-group mb-4">
+           
+            <input type="text" className="form-control" name="phone" placeholder="Enter Phone Number" maxLength="11" required />
+          </div>
+
+          {error && (
+            <div className="alert alert-danger small py-2 mb-3" role="alert">
+              {error}
+            </div>
+          )}
+
+          <button type="submit" className="btn btn-warning w-100 fw-bold shadow-sm">
+            ➕ Add Cashier
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
 export default SignUpCashier;
