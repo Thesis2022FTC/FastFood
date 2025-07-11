@@ -70,24 +70,13 @@ const CardGrid = ({ fastfood }) => {
               </Card.Text>
             </Card.Body>
 
-        <ListGroup className="list-group-flush">
-  <ListGroupItem className="small bg-light text-start">
-    <strong>📍 Location:</strong> {item.Location}
-  </ListGroupItem>
-  <ListGroupItem className="small bg-light text-start">
-    <strong>👥 Capacity:</strong> {item.Capacity} persons
-  </ListGroupItem>
-  <ListGroupItem className="small bg-light text-start">
-    <strong>⏰ Store Hours:</strong> {item.TimeStart} - {item.TimeClose}
-  </ListGroupItem>
-  <ListGroupItem className="small bg-light text-start">
-    <strong>🚗 Drive Thru:</strong> {item.Drivethru ? 'Yes' : 'No'}
-  </ListGroupItem>
-  <ListGroupItem className="small bg-light text-start">
-    <strong>🅿️ Parking Space:</strong> {item.ParkingSpace ? 'Yes' : 'No'}
-  </ListGroupItem>
-</ListGroup>
-
+            <ListGroup className="list-group-flush text-start">
+              <ListGroupItem className='small bg-light'><strong>📍 Location:</strong> {item.Location}</ListGroupItem>
+              <ListGroupItem className='small bg-light'><strong>👥 Capacity:</strong> {item.Capacity} persons</ListGroupItem>
+              <ListGroupItem className='small bg-light'><strong>⏰ Store Hours:</strong> {item.TimeStart} - {item.TimeClose}</ListGroupItem>
+              <ListGroupItem className='small bg-light'><strong>🚗 Drive Thru:</strong> {item.Drivethru ? 'Yes' : 'No'}</ListGroupItem>
+              <ListGroupItem className='small bg-light'><strong>🅿️ Parking Space:</strong> {item.ParkingSpace ? 'Yes' : 'No'}</ListGroupItem>
+            </ListGroup>
 
             <Card.Body className="text-center">
               <Button
