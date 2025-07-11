@@ -1,0 +1,34 @@
+/* Sidebar.css */
+.custom-tabs .nav-tabs {
+  background-color: #f8f9fa; /* Light gray background */
+  border-bottom: 2px solid #dee2e6;
+}
+
+.custom-tabs .nav-link {
+  color: #ffffff;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: 6px 6px 0 0;
+  transition: all 0.3s ease;
+}
+
+.custom-tabs .nav-link:hover {
+  background-color: #e9ecef;
+  color: #007bff;
+}
+
+.custom-tabs .nav-link.active {
+  background-color: #ffffff;
+  color: #0d6efd;
+  border: 2px solid #0d6efd;
+  border-bottom: none;
+  font-weight: 600;
+}
+
+.custom-tabs .tab-content {
+  padding: 20px;
+  background-color: #ffffff;
+  border: 2px solid #dee2e6;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+}
