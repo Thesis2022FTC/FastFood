@@ -129,8 +129,10 @@ const [selectedCategory, setSelectedCategory] = useState("");
     };
 
     return (
-        <Container style={{ marginTop: 30, marginBottom: 30, backgroundColor:'#fff' }}>
-            <Alert variant="dark" className="text-center blockquote" style={{ marginTop: 30, marginBottom: 30 }}>Add/Update Menu</Alert>
+        <Container style={{ marginTop: 30, marginBottom: 30, backgroundColor:'#fff', padding:'10px' }}>
+             <Alert  className="text-center blockquote" style={{ marginTop: 30,  marginBottom:30,backgroundColor:"#e6a535ff",   color: 'white',
+                               fontWeight: 'bold',
+                               textTransform: 'uppercase',padding: '15px 20px', margin:'20px'}}>Add/Update Menu</Alert>
             <Form onSubmit={handleSubmit}>
                 <Row className="mb-3">
                     <Form.Group as={Col} controlId="formGridCompanyname">

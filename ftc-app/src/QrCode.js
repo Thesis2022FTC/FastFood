@@ -60,7 +60,7 @@ const QrCodeReader = () => {
             className="shadow-lg border-0"
             style={{
               borderRadius: "20px",
-              background: "linear-gradient(to bottom, #fdfbfb, #ebedee)"
+              background: "linear-gradient(to bottom, #e6a535ff, #ebedee)"
             }}
           >
             <Card.Body className="text-center p-4">

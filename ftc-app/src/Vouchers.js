@@ -171,11 +171,9 @@ useEffect(() => {
     <Container className="auth-inner auth-wrapper"
       style={{ marginTop: 30, marginBottom: 30, backgroundColor: "#fff" }}
     >
-      <Alert
-        variant="dark"
-        className="text-center blockquote"
-        style={{ marginTop: 30, marginBottom: 30 }}
-      >
+       <Alert  className="text-center blockquote" style={{ marginTop: 30,  marginBottom:30,backgroundColor:"#e6a535ff",   color: 'white',
+                         fontWeight: 'bold',
+                         textTransform: 'uppercase',padding: '15px 20px', margin:'5px'}}>
         Vouchers Discount
       </Alert>
       <Form onSubmit={handleSubmit}>
