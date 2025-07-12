@@ -21,6 +21,7 @@ import SuccessOrder from './Order/SuccessOrder';
 import ResetPassword from './ForgotPassword';
 import CustomerSignup from './signupCustomer'
 import MyOrderHistory from './Order/OrderHistory';
+import Terms from './Terms';
 //import CashierSignup from './signupCashier'
 function App() {
   const dispatch = useDispatch();
@@ -65,6 +66,7 @@ function App() {
           <Route path="/reset-pass" component={ResetPassword} />
           <Route path="/sign-up-customer" component={CustomerSignup} />
           <Route path="/order-history" component={MyOrderHistory} />
+           <Route path="/terms" component={Terms} />
         </Switch>
       </div>
     </Router>
