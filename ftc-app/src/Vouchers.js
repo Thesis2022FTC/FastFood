@@ -94,7 +94,7 @@ const [vouchersRaw, setVouchersRaw] = useState([]);
     };
 
     updateVoucherStatuses();
-    const interval = setInterval(updateVoucherStatuses, 20000); // update every 60s
+    const interval = setInterval(updateVoucherStatuses, 5000); // update every 5s
 
     return () => clearInterval(interval);
   }, [vouchersRaw]);
