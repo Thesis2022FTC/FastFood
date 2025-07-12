@@ -94,7 +94,7 @@ const [vouchersRaw, setVouchersRaw] = useState([]);
     };
 
     updateVoucherStatuses();
-    const interval = setInterval(updateVoucherStatuses, 60000); // update every 60s
+    const interval = setInterval(updateVoucherStatuses, 20000); // update every 60s
 
     return () => clearInterval(interval);
   }, [vouchersRaw]);
@@ -112,7 +112,8 @@ useEffect(() => {
 
     // const base64Image=encode(uploadFile.files[0].name)
     const expirationDate = new Date();
-    expirationDate.setDate(expirationDate.getDate() + 7); // add 7 days
+    //expirationDate.setDate(expirationDate.getDate() + 7); // add 7 days
+    expirationDate.setSeconds(expirationDate.getSeconds() + 30); // add 30 seconds for testing
     const x= voucher_codes.generate({
         length: 10,
         count: 1,
